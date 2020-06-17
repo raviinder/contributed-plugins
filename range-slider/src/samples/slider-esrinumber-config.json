@@ -267,7 +267,8 @@
           "delay": 3000,
           "range": { "min": -120, "max": -115 },
           "limit": { "min": -120, "max": -90 },
-          "type": "number"
+          "type": "number",
+          "units": "Longitude"
         },
         "layers": [{
             "id": "0",

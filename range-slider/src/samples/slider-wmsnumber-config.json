@@ -301,7 +301,8 @@
           "delay": 3000,
           "range": { "min": 90, "max": 100 },
           "limit": { "min": 0, "max": 400 },
-          "type": "number"
+          "type": "number",
+          "units": ""
         },
         "layers": [{
             "id": "wms",

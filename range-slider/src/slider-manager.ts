@@ -1,4 +1,5 @@
 import {
+    DESC_BAR_TEMPLATE,
     LOCK_BAR_TEMPLATE,
     LOOP_BAR_TEMPLATE,
     PLAY_BAR_TEMPLATE,
@@ -53,6 +54,10 @@ export class SliderManager {
                 // if all layers are loaded, initialize slider creation
                 if (nbLayers === this._config.layers.length) {
                     this.initializeSlider(layers);
+
+                    const layersInfo = layers.map((item) => { return `${item.layer.name} (${item.layerInfo.field})` }).join(', ');
+                    document.getElementsByClassName('slider-desc-layers')[0].textContent = layersInfo;
+                    document.getElementsByClassName('slider-desc-info')[0].textContent =  this._config.description;
                 }
             }
         });
@@ -163,6 +168,9 @@ export class SliderManager {
             else if (ctrl === 'delay') { templates.push(DELAY_BAR_TEMPLATE); }
             else if (ctrl === 'export') { templates.push(EXPORT_BAR_TEMPLATE); }
         }
+
+        // add the description control to show/hide info
+        templates.unshift(DESC_BAR_TEMPLATE);
 
         // create slider bar controls
         this._panel.controls = new SliderControls(this._mapApi, this._panel, templates, this._slider);

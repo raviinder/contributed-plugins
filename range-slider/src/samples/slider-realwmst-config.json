@@ -537,7 +537,8 @@
                 "delay": 3000,
                 "range": { "min": 1451192400000, "max": 1514350800000 },
                 "limit": { "min": 1167195600000, "max": 1514350800000 },
-                "type": "wmst"
+                "type": "wmst",
+                "units": ""
               },
               "layers": [{
                   "id": "wmst",

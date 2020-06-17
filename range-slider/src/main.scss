@@ -1,5 +1,9 @@
 @import '../node_modules/nouislider/distribute/nouislider.css';
 
+@mixin text-color {
+    color: #999;
+}
+
 // overwrite nouislider class
 .noUi-marker-horizontal.noUi-marker-large {
     height: 10px;;
@@ -85,6 +89,7 @@ input:focus + .noUi-tooltip { display: block; }
 .rv-rangeslider {
     display: flex;
     flex-direction: row;
+    padding: 10px;
 
     .slider-content {
         overflow: hidden;
@@ -123,6 +128,12 @@ input:focus + .noUi-tooltip { display: block; }
                         width: 80px;
                     }
 
+                    &.slider-desc-control {
+                        md-icon {
+                            height: 16px;
+                        }
+                    }
+
                     &.slider-loop-control .slider-loop-control-active {
                         color: black;
                         opacity: 1;
@@ -145,6 +156,25 @@ input:focus + .noUi-tooltip { display: block; }
                     }
                 }
             }
+
+            .slider-widget {
+                width: 97%;
+            }
+
+            .slider-units {
+                width: 3%;
+                right: 10px;
+                position: absolute;
+                @include text-color;
+            }
+        }
+    }
+
+    .slider-desc {
+        @include text-color;
+
+        span {
+            display: block;
         }
     }
  }

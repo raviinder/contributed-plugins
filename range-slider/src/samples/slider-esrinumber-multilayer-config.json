@@ -277,7 +277,8 @@
         "params": {
           "delay": 3000,
           "range": { "min": 1400, "max": 1900 },
-          "type": "number"
+          "type": "number",
+          "units": "Total MW"
         },
         "layers": [{
           "id": "0",

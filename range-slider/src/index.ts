@@ -63,8 +63,8 @@ export interface Range {
 }
 
 RangeSlider.prototype.panelOptions = {
-    top: 'calc(100% - 165px)',
-    height: '110px',
+    top: 'calc(100% - 235px)',
+    height: '185px',
     'margin-right': '60px',
     'margin-left': '420px'
 };
@@ -86,6 +86,8 @@ RangeSlider.prototype.translations = {
     'en-CA': {
         title: 'Range Slider',
         bar: {
+            show: 'Show slider information',
+            hide: 'Hide slider information',
             lock: 'Lock left anchor',
             unlock: 'Unlock left anchor',
             loop: 'Animate in loop',
@@ -106,9 +108,11 @@ RangeSlider.prototype.translations = {
     'fr-CA': {
         title: 'Curseur de plage',
         bar: {
+            show: 'Afficher l\'information du curseur de plage',
+            hide: 'Cacher l\'information du curseur de plage',
             lock: 'Verrouiller la molette gauche',
             unlock: 'Déverrouiller la molette gauche',
-            loop: 'animer en boucle',
+            loop: 'Animer en boucle',
             unloop: 'Ne pas animer en boucle',
             previous: 'Précédent',
             play: 'Jouer',
