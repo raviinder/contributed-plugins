@@ -16,7 +16,9 @@ Inside your configuration file you need
           "delay": 3000,
           "limit": { "min": 1109108871000, "max": 1111505342000 },
           "range": { "min": 1109108871000, "max": 1111505342000 },
-          "type": "date"
+          "type": "date",
+          "units": "string",
+          "description": "string"
         },
         "layers": [{
             "id": "GeoChron",
@@ -43,6 +45,8 @@ Configuration parameters
         - min: The minimal value for the limit. Must be set for WMS layers. If not set, layer min and max value will be use.
         - max: The maximum value for the limit. Must be set for WMS layers. If not set, layer min and max value will be use.
     - type: type of slider (date or number). If date is selected, range and limit must be in milliseconds.
+    - units: units label to add add the right of the slider bar.
+    - descriptions: description to add to the slider info section. By default, layer name and field will be there.
 - layers: array of layers to use inside the slider
     - id: layer id as define in layer section
     - field: field name of the field to use to filter with the range slider. It must be the field name, not the alias.

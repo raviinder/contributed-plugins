@@ -49,6 +49,9 @@ export class SliderBar {
         this._slider.loop = config.loop;
         this._slider.range = config.range;
         this._slider.export = config.export;
+
+        // set units label value
+        document.getElementsByClassName('slider-units')[0].textContent = config.units;
     }
 
     /**

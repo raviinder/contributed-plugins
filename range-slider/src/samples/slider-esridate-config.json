@@ -283,7 +283,8 @@
         "params": {
           "delay": 6000,
           "range": { "min": 1109108871000, "max": 1111505342000 },
-          "type": "date"
+          "type": "date",
+          "units": ""
         },
         "layers": [{
             "id": "GeoChron",

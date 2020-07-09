@@ -293,7 +293,8 @@
           "delay": 3000,
           "range": { "min": 2013, "max": 2014 },
           "limit": { "min": 2000, "max": 2018 },
-          "type": "number"
+          "type": "number",
+          "units": ""
         },
         "layers": [{
             "id": "wms2",
