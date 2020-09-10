@@ -5,6 +5,7 @@ export default class Swiper {
     * @param {Object} mapApi the viewer api
     */
     private layerNb: number = 0; 
+    private layerNames: string[] = [];
     init(mapApi: any) {
         this.mapApi = mapApi;
 
@@ -14,7 +15,12 @@ export default class Swiper {
 
         this.mapApi.layersObj.layerAdded.subscribe((addedLayer: any) => {
             // check if loaded layer is inside the config
-            this.config.layers.find((layer) => { if (layer.id === addedLayer.id) { this.layerNb++; }});
+            this.config.layers.find((layer) => {
+                if (layer.id === addedLayer.id) {
+                    this.layerNb++;
+                    this.layerNames.push(addedLayer.name);
+                }
+            });
         });
 
         // get ESRI LayerSwipe dependency
@@ -51,7 +57,8 @@ export default class Swiper {
         const swipeWidget = new myBundle.layerSwipe({
             type: swiper.type,
             map: this.mapApi.esriMap,
-            layers: layers
+            layers: layers,
+            left: this.getWidth() / 2
         }, 'rv-swiper-div');
 
         let that = this;
@@ -75,10 +82,13 @@ export default class Swiper {
                 swipeWidget.swipe();
             }, swipeWidget, item, swiper.keyboardOffset));
 
-            // change text if french
+            // change text if french and add the layer names
             if (that._RV.getCurrentLang() === 'fr-CA') {
                 item.title = 'Faites glisser pour voir les couches sous-jacentes';
             }
+
+            // add layer name to tooltip
+            item.title += `\r\n- ${that.layerNames.join(',\r\n- ')}`;
         });
 
         swipeWidget.startup();
@@ -99,6 +109,21 @@ export default class Swiper {
             newArgs.push.apply(newArgs, arguments);
             return fn.apply(this, newArgs);
         };
+    }
+
+    /**
+    * Get browser window width to setup the swiper in the middle of it
+    * @function getWidth
+    * @return {number} browser window width
+    */
+    getWidth(): number {
+        return Math.max(
+          document.body.scrollWidth,
+          document.documentElement.scrollWidth,
+          document.body.offsetWidth,
+          document.documentElement.offsetWidth,
+          document.documentElement.clientWidth
+        );
     }
 }
 
