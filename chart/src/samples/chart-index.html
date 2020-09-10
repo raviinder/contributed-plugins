@@ -59,9 +59,11 @@
             </noscript>
         </div>
 
+        <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
         <script>
             var SAMPLE_KEY = 'sample';
             var currentUrl = new URL(window.location.href);
+
             document.getElementById('selectConfig').addEventListener('change', changeConfig);
             loadSample();
 
