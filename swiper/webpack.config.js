@@ -44,7 +44,7 @@ module.exports = function(variable={}, argv) {
                 filename:  `./${pluginName}.css`
             }),
 
-            new CopyWebpackPlugin([
+            new CopyWebpackPlugin({ patterns: [
                 {
                     from: 'src/samples/*.+(html|json)',
                     to: 'samples/[name].[ext]',
@@ -54,7 +54,7 @@ module.exports = function(variable={}, argv) {
                     from: '../fgpv/*.+(js|css)',
                     to: '../fgpv'
                 }
-            ])
+            ]})
         ],
 
         devServer: {
