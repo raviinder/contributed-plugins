@@ -15,9 +15,9 @@ export default class ThematicSlider {
 
         // set details panel event on opening and closing to show/hide details and thematic panel
         this._panelDetails = mapApi.panelRegistryObj.details;
-        this._panelDetails.opening.subscribe(() => { 
+        this._panelDetails.opening.subscribe(() => {
             document.getElementById('thematicSlider').style.zIndex = '-10'; });
-        this._panelDetails.closing.subscribe(() => { 
+        this._panelDetails.closing.subscribe(() => {
             document.getElementById('thematicSlider').style.zIndex = '50'; });
 
         // get config and add language
