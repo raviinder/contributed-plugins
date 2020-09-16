@@ -173,6 +173,11 @@ export class SliderPanel {
         }
     }
 
+    /**
+     * Get the custom legend when define inside configuration
+     * @function getDefaultLegend
+     * @return {String} the html to add to legend section
+     */
     getCustomLegend(): string {
         let stack = '';
         for (let entry of this.active.legend) {
@@ -190,7 +195,7 @@ export class SliderPanel {
                     </div>`
         }
 
-        return stack
+        return stack;
     }
 
     /**
