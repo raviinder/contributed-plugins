@@ -269,6 +269,11 @@ export class DrawToolbar {
         // define pan and zoom event to redraw text
         this._mapApi.esriMap.on('pan-end', () => { setTimeout(() => this.createBackground(), 0); });
         this._mapApi.esriMap.on('zoom-end', () => { setTimeout(() => this.createBackground(), 0); });
+
+        // when graphic is edited, update measures
+        this._editToolbar.on('deactivate', (evt) => {
+            this.addToMap(evt.graphic, true);
+        });
     }
 
     /**
@@ -504,7 +509,7 @@ export class DrawToolbar {
      * @function addToMap
      * @param {Any} event esri toolbar event
      */
-    addToMap(evt: any) {
+    addToMap(evt: any, isEdit: boolean = false) {
         switch ((<any>evt).geometry.type) {
             case 'point':
                 // trigger observable
@@ -524,7 +529,13 @@ export class DrawToolbar {
                 (<any>this)._lengthParams.polylines = [evt.geometry];
                 this._geometryService.lengths((<any>this)._lengthParams);
 
-                this.addGraphic(evt.geometry, new this._bundle.SimpleLineSymbol());
+                if (!isEdit) {
+                    this.addGraphic(evt.geometry, new this._bundle.SimpleLineSymbol());
+                } else {
+                    // if graphic edition, delete the label measure because a new one is made automatically.
+                    const graphic = this.graphicsLayer.graphics.find(function(item) { return item.key === evt.key && item.symbol.type === 'textsymbol' });
+                    this.graphicsLayer.remove(graphic);
+                }
                 break;
             case 'polygon':
                 // remove duplicate vertex
@@ -538,7 +549,13 @@ export class DrawToolbar {
                 (<any>this)._areaParams.polygons = [evt.geometry];
                 this._geometryService.areasAndLengths((<any>this)._areaParams)
 
-                this.addGraphic(evt.geometry, new this._bundle.SimpleFillSymbol());
+                if (!isEdit) {
+                    this.addGraphic(evt.geometry, new this._bundle.SimpleFillSymbol());
+                } else {
+                    // if graphic edition, delete the label measure because a new one is made automatically.
+                    const graphic = this.graphicsLayer.graphics.find(function(item) { return item.key === evt.key && item.symbol.type === 'textsymbol' });
+                    this.graphicsLayer.remove(graphic);
+                }
                 break;
             case 'extent':
                 // trigger observable
