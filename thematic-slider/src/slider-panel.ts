@@ -270,6 +270,7 @@ export class SliderPanel {
 
         // set panel info and layers visibility
         this.setPanelInfo();
+        this.setPanelLegend();
         this.setLayerVisibility();
 
         // check if you need to enable/disable step buttons and push the info to the observable
@@ -313,6 +314,7 @@ export class SliderPanel {
             // otherwise, continue where it is
             this._index =  (this._index === this._layers.length - 1) ? 0 : this._index;
             this.setPanelInfo();
+            this.setPanelLegend();
 
             // timeout function to play the slider with the duration provided within configuration
             setTimeout(this.setPlayInterval, this.active.duration, this);

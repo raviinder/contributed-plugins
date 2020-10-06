@@ -93,6 +93,7 @@
         {
             "id": "wms",
             "layerType": "ogcWms",
+            "suppressGetCapabilities": true,
             "url": "http://webservices.maps.canada.ca/arcgis/services/NRCan/earthquakes_en/MapServer/WmsServer",
             "name": "Real WMS",
             "layerEntries": [
