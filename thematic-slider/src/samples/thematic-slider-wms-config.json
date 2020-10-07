@@ -286,9 +286,9 @@
         "open": true,
         "autorun": false,
         "loop": true,
-        "description": true,
         "slider": true,
         "stack": false,
+        "legendStack": false,
         "layers": [
             { "id": "wms",
               "duration": 3000,

@@ -18,6 +18,7 @@ export class SliderPanel {
 
     private _loop: boolean = false;
     private _stack: boolean = false;
+    private _legendStack: boolean = false;
 
     // *** Static observable for the class ***
     // observable to detect play/pause modification
@@ -109,9 +110,10 @@ export class SliderPanel {
                 // set slider control (loop and stack) value
                 this._loop = config.loop;
                 this._stack = config.stack;
+                this._legendStack = config.legendStack;
 
-                // check what controls we need (nothing, description or both)
-                const initControls:string = (config.slider && config.description) ? 'both' : config.description ? 'desc' : '';
+                // check what controls we need (description or both)
+                const initControls: string = (config.slider) ? 'both' : 'desc';
                 this.addControls(initControls);
             }
         });
@@ -157,9 +159,10 @@ export class SliderPanel {
 
     /**
      * Set the panel legend with the active layer
+     * @param {String} direction the direction to step
      * @function setPanelLegend
      */
-    private setPanelLegend() {
+    private setPanelLegend(direction: string = 'up') {
         // if legend element array is empty, create default legend, otherwise use configuration
         let stack = '';
         if (this.active.legend.length === 0) {
@@ -169,6 +172,19 @@ export class SliderPanel {
         }
 
         if ($('.rv-thslider-legend').length > 0) {
+            // If stack and direction is up, add the array of images
+            // If direction is down, remove the last item
+            // If no stack, just set it to the active image
+            if (this._legendStack && direction === 'up' && this._index > 0) {
+                stack = $('.rv-thslider-legend')[0].innerHTML + stack;
+            } else if (this._legendStack && direction === 'down' && this._index > 0) {
+                const symbols = $('.rv-thslider-symbol');
+                stack = '';
+                for (let i = 0; i < symbols.length - 1; i++) {
+                    stack += symbols[i].outerHTML;
+                }
+            }
+
             $('.rv-thslider-legend')[0].innerHTML = stack;
         }
     }
@@ -270,7 +286,7 @@ export class SliderPanel {
 
         // set panel info and layers visibility
         this.setPanelInfo();
-        this.setPanelLegend();
+        this.setPanelLegend(direction);
         this.setLayerVisibility();
 
         // check if you need to enable/disable step buttons and push the info to the observable
@@ -314,7 +330,6 @@ export class SliderPanel {
             // otherwise, continue where it is
             this._index =  (this._index === this._layers.length - 1) ? 0 : this._index;
             this.setPanelInfo();
-            this.setPanelLegend();
 
             // timeout function to play the slider with the duration provided within configuration
             setTimeout(this.setPlayInterval, this.active.duration, this);
