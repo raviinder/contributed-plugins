@@ -271,9 +271,9 @@
         "open": false,
         "autorun": false,
         "loop": false,
-        "description": true,
         "slider": true,
         "stack": false,
+        "legendStack": false,
         "layers": [
           { "id": "0",
             "duration": 3000,

@@ -1260,9 +1260,9 @@
             "open": true,
             "autorun": false,
             "loop": false,
-            "description": true,
             "slider": true,
             "stack": false,
+            "legendStack": false,
             "layers": [
                 {
                     "duration": 3000,

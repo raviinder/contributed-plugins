@@ -11,9 +11,9 @@ Inside your configuration file you need
         "open": true,
         "autorun": false,
         "loop": true,
-        "description": true,
         "slider": true,
         "stack": false,
+        "legendStack": false,
         "layers": [
           { "id": "0",
             "duration": 3000,
@@ -84,9 +84,9 @@ Configuration parameters
 - open: boolean to set the controls panel (description and slider) open by default
 - autorun: boolean to start the animation automatically (if true, open should be true as well)
 - loop: boolean to restart automatically the animation when it reaches the end of the array
-- description: boolean to show the description control
 - slider: boolean to show the slider controls (description needs to be true for slider to be true)
 - stack: boolean to specify if only the active layer is show or if we stack all layers visibility from 0 to the active layer
+- legendStack: boolean to specify if we only show the legend for the active layer or we stack the legend of the active layer plus the previous one (NOTE: Do not use with custom legend. Create the proper array of images instead)
 - layers: array of layers to loop trought
     - id: layer id as define in layer section
     - duration: duration in millisecond to stay on the active layer
