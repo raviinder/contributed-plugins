@@ -12,12 +12,12 @@ data1 = 34;45;65
 data2 = 12;54;23
 label = First;Second
 These values will display a bar chart with 2 categories (First and Second) with 2 sets of values for each. Labels can be part of the layer and this is especially
-useful when labaels are different from one feature to another. If they are the same, they can be set inside the configuration for the chart.
+useful when labels are different from one feature to another. If they are the same, they can be set inside the configuration for the chart.
 
 You can have a line chart with date as x axis like this:
 Measure1 = (2011-03-16,0.01),(2011-03-21,2.49),(2011-03-28,0.54),(2011-04-01,0.16),(2011-04-11,0.14),(2011-04-18,0.05)
 Measure2 = (2011-03-21,0.173),(2011-03-28,0.069),(2011-04-01,0.023),(2011-04-11,0.080),(2011-04-18,0.030),(2011-04-26,0.005)
-Each couple of values (yyyy-mm-dd,data) is a point on the line chart with the date as the x value and the data as the y value. Thois sample will display a line chart with 2 lines.
+Each couple of values (yyyy-mm-dd,data) is a point on the line chart with the date as the x value and the data as the y value. This sample will display a line chart with 2 lines.
 
 You can also have a customized details panel to show useful data. It can take links, images, data from the the feature. It is based on the Markdown notation and uses
 [Showdown](https://github.com/showdownjs/showdown) library to parse the markdown from the configuration file to the details panel. To use the value of a field from the feature,
