@@ -53,7 +53,7 @@
         setTimeout(() => {
             // test to add observable for added geometry
             window.drawObs.drawPoint.subscribe(value => {
-                console.log(`Poind added: ${JSON.stringify(value)}`);
+                console.log(`Point added: ${JSON.stringify(value)}`);
             });
             window.drawObs.drawPolyline.subscribe(value => {
                 console.log(`Polyline added: ${JSON.stringify(value)}`);
