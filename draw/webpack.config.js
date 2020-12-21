@@ -7,7 +7,7 @@ const pluginName = 'draw';
 module.exports = function(variable={}, argv) {
     const config = {
         mode: argv.mode,
-        devtool: argv.mode === 'development' ? 'cheap-module-eval-source-map' : false,
+        devtool: argv.mode === 'development' ? 'source-map' : false,
 
         entry: ['./src/loader.js'],
 
