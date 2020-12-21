@@ -15,6 +15,7 @@
         width: fit-content !important;
         top: calc(100% - 110px) !important;
         height: 40px !important;
+        opacity: 1 !important;
 
         .panel-body {
             @include small-padding;
@@ -94,23 +95,12 @@
 
 input:focus + .noUi-tooltip { display: block; }
 
-// smaller then tablet
-@media screen and (max-width: 768px) {
+// smaller then a laptop (Thresold is IPad Pro)
+@media screen and (max-width: 1024px) {
     @include min-ui;
 
     .slider-minmax-control {
         display: none !important;
-    }
-}
-
-// Smaller than a laptop (large format), larger than a tablet
-@media screen and (max-width: 1439px) and (min-width: 769px) {
-    .slider-export-control {
-        display: none!important;
-    }
-
-    #rangeSlider {
-        margin-left: 10px !important;
     }
 }
 
