@@ -26,6 +26,7 @@ export class DrawObs {
     }
 
     // observables available to user
+    // ! the observable are not fired when user edits a geometry. It is better not to use edit function when you rely on observable
     drawPoint = this._drawPoint.asObservable();
     drawPolyline = this._drawPolyline.asObservable();
     drawPolygon = this._drawPolygon.asObservable();
@@ -512,17 +513,16 @@ export class DrawToolbar {
     addToMap(evt: any, isEdit: boolean = false) {
         switch ((<any>evt).geometry.type) {
             case 'point':
-                // trigger observable
-                (<any>window).drawObs.subsDrawPoint(evt.geometry);
+                if (!isEdit) {
+                    // trigger observable
+                    (<any>window).drawObs.subsDrawPoint(evt.geometry);
 
-                this.addGraphic(evt.geometry, new this._bundle.SimpleMarkerSymbol());
+                    this.addGraphic(evt.geometry, new this._bundle.SimpleMarkerSymbol());
+                }
                 break;
             case 'polyline':
                 // remove duplicate vertex
                 evt.geometry.paths[0] = this.removeDuplicate(evt.geometry.paths[0], false);
-
-                // trigger observable
-                (<any>window).drawObs.subsDrawPolyline(evt.geometry);
 
                 // get length measure
                 this._activeGraphic = evt.geometry;
@@ -530,6 +530,9 @@ export class DrawToolbar {
                 this._geometryService.lengths((<any>this)._lengthParams);
 
                 if (!isEdit) {
+                    // trigger observable
+                    (<any>window).drawObs.subsDrawPolyline(evt.geometry);
+
                     this.addGraphic(evt.geometry, new this._bundle.SimpleLineSymbol());
                 } else {
                     // if graphic edition, delete the label measure because a new one is made automatically.
@@ -541,15 +544,15 @@ export class DrawToolbar {
                 // remove duplicate vertex
                 evt.geometry.rings[0] = this.removeDuplicate(evt.geometry.rings[0], true);
 
-                // trigger observable
-                (<any>window).drawObs.subsDrawPolygon(evt.geometry);
-
                 // get length and area measure
                 this._activeGraphic = evt.geometry;
                 (<any>this)._areaParams.polygons = [evt.geometry];
                 this._geometryService.areasAndLengths((<any>this)._areaParams)
 
                 if (!isEdit) {
+                    // trigger observable
+                    (<any>window).drawObs.subsDrawPolygon(evt.geometry);
+
                     this.addGraphic(evt.geometry, new this._bundle.SimpleFillSymbol());
                 } else {
                     // if graphic edition, delete the label measure because a new one is made automatically.
