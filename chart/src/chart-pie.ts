@@ -2,6 +2,8 @@ import { ChartLoader } from './chart-loader';
 
 /**
  * Creates pie and doughnut charts.
+ * @exports
+ * @class ChartPie
  */
 export class ChartPie {
     /**
@@ -73,6 +75,7 @@ interface dataset {
 }
 
 export interface ChartPie {
+    _RV: any;
     options: any;
     type: string;
     data: any;

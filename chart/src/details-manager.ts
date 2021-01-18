@@ -4,6 +4,11 @@ import {
 
 const showdown  = require('showdown');
 
+/**
+ * Class to manage the custom details panel
+ * @exports
+ * @class DetailsManager
+ */
 export class DetailsManager {
     private _panelDetails: any;
     private _panelTrigger: boolean = false;
