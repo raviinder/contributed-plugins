@@ -2,6 +2,8 @@ import { ChartLoader } from './chart-loader';
 
 /**
  * Creates bar charts.
+ * @exports
+ * @class ChartBar
  */
 export class ChartBar {
     /**
