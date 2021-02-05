@@ -23,7 +23,6 @@ export class SliderBar {
     private _stepType: string;
     private _rangeType: string;
     private _interval: number;
-    private _intervalUnit: string;
 
     // *** Static observable for the class ***
     // observable to detect play/pause modification
@@ -62,8 +61,7 @@ export class SliderBar {
         // set range and limits information. Will help to set the different slider (range (single or dual) and limit (dynamic or static))
         this._stepType = config.stepType;
         this._rangeType = config.rangeType;
-        this._interval = config.interval;
-        this._intervalUnit = config.intervalUnit;
+        this._interval = config.interval; // TODO: seems not really use, value is pass to a unction but it is always 0.... check
 
         // set units label value
         document.getElementsByClassName('slider-units')[0].textContent = config.units;
@@ -85,7 +83,7 @@ export class SliderBar {
                 behaviour: 'drag-tap',
                 tooltips: this.setTooltips(type, language),
                 range: this.setNoUiBarRanges(mapWidth, this.limit, this._rangeType, this._stepType, this._interval),
-                step: 1,
+                step: (this._limit.max - this.limit.min) / 100,
                 snap: (this._stepType === 'static') ? true : false,
                 pips: {
                     mode: 'range',
