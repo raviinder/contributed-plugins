@@ -27,7 +27,6 @@
         "deploy": "gh-pages -d ../dist"
     },
     "dependencies": {
-        "ag-grid-community": "19.0.0",
         "rxjs": "6.4.0",
         "gh-pages": "2.2.0"
     },

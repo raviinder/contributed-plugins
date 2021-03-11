@@ -27,7 +27,6 @@
         "deploy": "gh-pages -d ../dist"
     },
     "dependencies": {
-        "ag-grid-community": "19.0.0",
         "debounce": "1.2.0",
         "file-saver": "2.0.0",
         "gh-pages": "2.2.0",
