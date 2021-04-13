@@ -5,6 +5,8 @@ Free to use but unsupported plugins for FGPV/RAMP2
 
 This is a repository containing plugins for the [FGPV-VGPF RAMP2 Viewer](https://github.com/fgpv-vpgf/fgpv-vpgf) that have been submitted by users of the library. None of the plugins are officially maintained or supported by the RAMP2 development team; however we hope they are useful or provide learning opportunities.
 
+Many of the plugins listed below deal with the visualization of time series data. For more detailed information on the appropriate application of a specific plugin and using the FGP Authoring Tool Web application to enable and configure plugins, please consult [A Guide for Time Series Visualization for the Federal Geospatial Platform (FGP)](https://fgpguide.github.io/Guidelines/chooseplugins/).
+
 [List of Plugins](#list-of-plugins)
 
 ## Submission Guidelines
