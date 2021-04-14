@@ -221,7 +221,7 @@ export class SliderBar {
 
             // if hours, add it to the label and change margin so label are inside
             if (this._precision === -2) {
-                value += ` - ${date.getHours()}:${((date.getMinutes() + 1).toString() as any).padStart(2, '0')}:${((date.getSeconds() + 1).toString() as any).padStart(2, '0')}`;
+                value += ` - ${((date.getHours()).toString() as any).padStart(2, '0')}:${((date.getMinutes()).toString() as any).padStart(2, '0')}:${((date.getSeconds()).toString() as any).padStart(2, '0')}`;
                 $('.slider-bar')[0].style.paddingLeft = '70px';
             }
         }
@@ -788,7 +788,7 @@ export class SliderBar {
      * @return {String}formated date
      */
     getEsriDate(date: Date): string {
-        return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${(date.getUTCHours().toString() as any).padStart(2, '0')}:${(date.getUTCMinutes().toString() as any).padStart(2, '0')}:${(date.getSeconds().toString() as any).padStart(2, '0')}`;
+        return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${(date.getHours().toString() as any).padStart(2, '0')}:${(date.getMinutes().toString() as any).padStart(2, '0')}:${(date.getSeconds().toString() as any).padStart(2, '0')}`;
     }
 
     /**
