@@ -192,7 +192,8 @@ export class SliderManager {
             for (let row of attrPipe.attributes) { values.push(row[layerInfo.field]); }
 
             // set limit and range if not set from configuration. Also update if limit are higher of lower then actual values
-            const limit: Range = { min: Math.min.apply(null, values), max: Math.max.apply(null, values) };
+            // filter values to remove null
+            const limit: Range = { min: Math.min.apply(null, values.filter((val) => val !== null)), max: Math.max.apply(null, values.filter((val) => val !== null)) };
             if (this._slider.limit.min === null || this._slider.limit.min > limit.min) { this._slider.limit.min = limit.min; }
             if (this._slider.limit.max === null || this._slider.limit.max < limit.max) { this._slider.limit.max = limit.max; }
             this._slider.range = this._config.range.min !== null ? this._config.range : this._slider.limit;
