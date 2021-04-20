@@ -9,6 +9,9 @@ const childProcess = require('child_process');
 
 const pluginName = 'thematic-slider';
 
+// get date
+const date = new Date().toISOString();
+
 // get version numbers and the hash of the current commit
 const [major, minor, patch] = package.version.split('.');
 const hash = JSON.stringify(childProcess.execSync('git rev-parse HEAD').toString().trim());
@@ -77,7 +80,7 @@ module.exports = function(variable={}, argv) {
             ]}),
 
             new webpack.BannerPlugin({
-                banner: `Plugin ${pluginName}: ${major}.${minor}.${patch} - ${hash}`,
+                banner: `Plugin ${pluginName}: ${major}.${minor}.${patch} - ${hash} - ${date}`,
                 include: /\.js$/
               })
         ],
@@ -93,6 +96,17 @@ module.exports = function(variable={}, argv) {
             watchContentBase: true
         }
     };
+
+    if (argv.mode === 'production') {
+        config.optimization = {
+          minimize: true,
+          minimizer: [
+            new TerserPlugin({
+              extractComments: false,
+            }),
+          ],
+        };
+    }
 
     return config;
 };
