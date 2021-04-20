@@ -400,7 +400,7 @@ export class ChartLoader {
             else if (dateString.length === 7 && dateString.indexOf('-') === -1) { dateString = `${dateString}-01`; }
             else if (dateString.length === 8 && dateString.indexOf('-') === -1) { dateString = `${dateString.substring(0,4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}`; }
 
-            return  new Date(`${dateString}:00:00:00`);
+            return  new Date(`${dateString.trim()}T00:00:00`);
         }
 
         // loop trough datasets to add from config
