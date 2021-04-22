@@ -107,10 +107,15 @@
       },
       "layers": [
         {
-          "id": "1",
-          "name": "Natural Gas",
-          "layerType": "esriFeature",
-          "url": "https://geoappext.nrcan.gc.ca/arcgis/rest/services/NACEI/energy_infrastructure_of_north_america_en/MapServer/21"
+          "id": "0",
+          "name": "Geomet",
+          "layerType": "ogcWms",
+          "url": "https://geo.weather.gc.ca/geomet",
+          "layerEntries": [{
+            "id": "RADAR_1KM_RSNO",
+            "name": "RADAR_1KM_RSNO"
+          }],
+          "suppressGetCapabilities": true
         }
       ],
       "extentSets": [
@@ -269,20 +274,23 @@
         "open": true,
         "autorun": false,
         "loop": false,
-        "controls": ["lock", "reverse", "refresh", "loop"],
+        "controls": ["lock", "loop", "refresh", "reverse"],
         "params": {
           "delay": 3000,
-          "type": "number",
+          "type": "wmst",
           "rangeType": "single",
           "stepType": "static",
-          "range": { "min": 441, "max": null },
-          "limit": { "min": 200, "max": 2095, "staticItems": [441, 610, 933, 1352, 1674, 1905, 1962] },
+          "precision": "hours",
+          "range": { "min": null, "max": null },
+          "limit": { "min": null, "max": null },
+          "limits": [],
           "units": "",
-          "description": ""
+          "description": "This slider limit and range is set by the wms getCapabilities"
         },
         "layers": [{
-          "id": "1",
-          "field": "OBJECTID"
+          "id": "0",
+          "field": "TIME",
+          "isTimeAware": true
         }]
       }
     }

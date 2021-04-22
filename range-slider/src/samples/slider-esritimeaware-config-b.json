@@ -107,10 +107,19 @@
       },
       "layers": [
         {
-          "id": "1",
-          "name": "Natural Gas",
-          "layerType": "esriFeature",
-          "url": "https://geoappext.nrcan.gc.ca/arcgis/rest/services/NACEI/energy_infrastructure_of_north_america_en/MapServer/21"
+          "id": "0",
+          "name": "MSDI surface layer",
+          "layerType": "esriDynamic",
+          "url": "https://gisp.dfo-mpo.gc.ca/arcgis/rest/services/FGP/MSDI_Dynamic_Current_Layer/MapServer/",
+          "layerEntries": [{
+            "index": 1,
+            "nameField": "",
+            "name": "Coast"
+          }, {
+            "index": 2,
+            "nameField": "",
+            "name": "Harbor"
+          }]
         }
       ],
       "extentSets": [
@@ -269,20 +278,23 @@
         "open": true,
         "autorun": false,
         "loop": false,
-        "controls": ["lock", "reverse", "refresh", "loop"],
+        "controls": ["lock", "loop", "refresh", "reverse"],
         "params": {
           "delay": 3000,
-          "type": "number",
-          "rangeType": "single",
-          "stepType": "static",
-          "range": { "min": 441, "max": null },
-          "limit": { "min": 200, "max": 2095, "staticItems": [441, 610, 933, 1352, 1674, 1905, 1962] },
+          "type": "date",
+          "rangeType": "dual",
+          "stepType": "dynamic",
+          "precision": "date",
+          "range": { "min": null, "max": null },
+          "limit": { "min": null, "max": null },
+          "limits": [],
           "units": "",
-          "description": ""
+          "description": "This slider limit and range is set by the time info"
         },
         "layers": [{
-          "id": "1",
-          "field": "OBJECTID"
+          "id": "0",
+          "field": "date_time",
+          "isTimeAware": true
         }]
       }
     }

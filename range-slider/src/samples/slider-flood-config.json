@@ -323,9 +323,8 @@
           "rangeType": "dual",
           "stepType": "dynamic",
           "precision": "date",
-          "interval": -1,
-          "range": { "min": 1617163200000, "max": 1619841600000 },
-          "limit": { "min": 1577854800000, "max": 1619841600000 },
+          "range": { "min": null, "max": null },
+          "limit": { "min": null, "max": null },
           "limits": [],
           "units": "",
           "description": "Let see current and active flood from January 2020 to May 2021."

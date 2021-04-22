@@ -107,10 +107,52 @@
       },
       "layers": [
         {
+          "id": "0",
+          "name": "Victoria",
+          "layerType": "ogcWms",
+          "featureInfoMimeType": "text/plain",
+          "url": "https://datacube.services.geo.ca/ows/aerial",
+          "layerEntries": [{
+                "id": "victoria",
+                "name": "victoria"
+            }],
+          "suppressGetCapabilities": true
+        },
+        {
           "id": "1",
-          "name": "Natural Gas",
-          "layerType": "esriFeature",
-          "url": "https://geoappext.nrcan.gc.ca/arcgis/rest/services/NACEI/energy_infrastructure_of_north_america_en/MapServer/21"
+          "name": "Halifax",
+          "layerType": "ogcWms",
+          "featureInfoMimeType": "text/plain",
+          "url": "https://datacube.services.geo.ca/ows/aerial",
+          "layerEntries": [{
+                "id": "halifax",
+                "name": "halifax"
+            }],
+          "suppressGetCapabilities": true
+        },
+        {
+          "id": "2",
+          "name": "Regina",
+          "layerType": "ogcWms",
+          "featureInfoMimeType": "text/plain",
+          "url": "https://datacube.services.geo.ca/ows/aerial",
+          "layerEntries": [{
+                "id": "regina",
+                "name": "regina"
+            }],
+          "suppressGetCapabilities": true
+        },
+        {
+          "id": "3",
+          "name": "Salish",
+          "layerType": "ogcWms",
+          "featureInfoMimeType": "text/plain",
+          "url": "https://datacube.services.geo.ca/ows/aerial",
+          "layerEntries": [{
+                "id": "salish",
+                "name": "salish"
+            }],
+          "suppressGetCapabilities": true
         }
       ],
       "extentSets": [
@@ -269,20 +311,35 @@
         "open": true,
         "autorun": false,
         "loop": false,
-        "controls": ["lock", "reverse", "refresh", "loop"],
+        "controls": ["lock", "loop", "refresh", "reverse"],
         "params": {
           "delay": 3000,
-          "type": "number",
+          "type": "wmst",
           "rangeType": "single",
           "stepType": "static",
-          "range": { "min": 441, "max": null },
-          "limit": { "min": 200, "max": 2095, "staticItems": [441, 610, 933, 1352, 1674, 1905, 1962] },
+          "precision": "date",
+          "range": { "min": null, "max": null },
+          "limit": { "min": null, "max": null },
+          "limits": [],
           "units": "",
-          "description": ""
+          "description": "This slider limit and range is set by the wms getCapabilities."
         },
         "layers": [{
+          "id": "0",
+          "field": "TIME",
+          "isTimeAware": true
+        }, {
           "id": "1",
-          "field": "OBJECTID"
+          "field": "TIME",
+          "isTimeAware": true
+        }, {
+          "id": "2",
+          "field": "TIME",
+          "isTimeAware": true
+        }, {
+          "id": "3",
+          "field": "TIME",
+          "isTimeAware": true
         }]
       }
     }

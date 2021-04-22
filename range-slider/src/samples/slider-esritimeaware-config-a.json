@@ -107,10 +107,10 @@
       },
       "layers": [
         {
-          "id": "1",
-          "name": "Natural Gas",
+          "id": "0",
+          "name": "Subset of U2 performances",
           "layerType": "esriFeature",
-          "url": "https://geoappext.nrcan.gc.ca/arcgis/rest/services/NACEI/energy_infrastructure_of_north_america_en/MapServer/21"
+          "url": "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/ArcGIS/rest/services/U2/FeatureServer/0"
         }
       ],
       "extentSets": [
@@ -269,20 +269,24 @@
         "open": true,
         "autorun": false,
         "loop": false,
-        "controls": ["lock", "reverse", "refresh", "loop"],
+        "controls": ["lock", "loop", "refresh", "reverse"],
         "params": {
           "delay": 3000,
-          "type": "number",
-          "rangeType": "single",
-          "stepType": "static",
-          "range": { "min": 441, "max": null },
-          "limit": { "min": 200, "max": 2095, "staticItems": [441, 610, 933, 1352, 1674, 1905, 1962] },
+          "type": "date",
+          "rangeType": "dual",
+          "stepType": "dynamic",
+          "precision": "date",
+          "startRangeEnd": true,
+          "range": { "min": null, "max": null },
+          "limit": { "min": null, "max": null },
+          "limits": [],
           "units": "",
-          "description": ""
+          "description": "This slider limit and range is set by the time info"
         },
         "layers": [{
-          "id": "1",
-          "field": "OBJECTID"
+          "id": "0",
+          "field": "Date",
+          "isTimeAware": true
         }]
       }
     }
