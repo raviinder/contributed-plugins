@@ -24,6 +24,7 @@ Inside your configuration file you need
           "limit": { "min": 1109108871000, "max": 1111505342000, staticItems: [] },
           "range": { "min": 1109108871000, "max": 1111505342000 },
           "startRangeEnd": false,
+          "rangeInterval": -1,
           "type": "date",
           "units": "string",
           "description": "string"

@@ -14,8 +14,8 @@
       },
       "legend": {
         "isOpen": {
-          "large": false,
-          "medium": false,
+          "large": true,
+          "medium": true,
           "small": false
         },
         "reorderable": false
@@ -143,21 +143,29 @@
         },
         {
           "id": "1",
-          "name": "Current flood",
-          "layerType": "ogcWms",
+          "name": "Flood in Canada - Current Year",
+          "layerType": "esriDynamic",
           "suppressGetCapabilities": true,
-          "url": "https://maps-cartes.services.geo.ca/egs_sgu/services/Flood_Inondation/EGS_Flood_Product_Current_en/MapServer/WMSServer",
+          "url": "https://maps-stage.services.geo.ca/egs_sgu/rest/services/Flood_Inondation/EGS_Flood_Product_Current_en_MULTILEVEL/MapServer/",
           "layerEntries": [{
-            "id": "0",
+            "index": 0,
             "name": "Product Footprints"
           },
           {
-            "id": "1",
-            "name": "In Canada"
+            "index": 1,
+            "name": "Current Year - level 1"
           },
           {
-            "id": "2",
-            "name": "Flooded Area in Canada"
+            "index": 2,
+            "name": "Current Year - level 2"
+          },
+          {
+            "index": 3,
+            "name": "Current Year - level 3"
+          },
+          {
+            "index": 4,
+            "name": "Current Year - level 4"
           }]
         }
       ],
@@ -165,10 +173,10 @@
         {
           "id": "EXT_NRCAN_Lambert_3978",
           "default": {
-            "xmax": 3549492,
-            "xmin": -2681457,
-            "ymax": 3482193,
-            "ymin": -883440
+            "xmax": 84065.65426297553,
+            "xmin": -336543.31195495697,
+            "ymax": 150156.49322665262,
+            "ymin": -55239.95923291899
           },
           "spatialReference": {
             "wkid": 3978
@@ -320,10 +328,10 @@
         "controls": ["lock", "loop", "refresh", "reverse"],
         "params": {
           "delay": 3000,
-          "type": "wmst",
+          "type": "date",
           "rangeType": "dual",
           "stepType": "dynamic",
-          "precision": "date",
+          "precision": "hour",
           "startRangeEnd": true,
           "rangeInterval": 604800000,
           "range": { "min": null, "max": null },

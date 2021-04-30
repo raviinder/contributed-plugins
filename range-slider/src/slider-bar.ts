@@ -284,6 +284,9 @@ export class SliderBar {
         this._slider.range = (this._rangeType === 'dual') ? this._slider.range : { min: this._slider.range.min, max: this._slider.range.min }
         this.setDefinitionQuery(this._slider.range);
 
+        // set step
+        this._step = this._slider.range.max - this._slider.range.min;
+
         // trap the on change event when user use handles
         let that = this;
         this._slider.noUiSlider.on('set.one', function (values) {
