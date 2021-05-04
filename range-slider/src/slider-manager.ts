@@ -102,6 +102,7 @@ export class SliderManager {
                 }
 
                 // create layer info
+                // ! we assume it is time aware, we will query metadata to know if it is the case
                 const layerInfo = { id: layer.id, field: '', isTimeAware: true }
                 layers.push({ layer, layerInfo });
                 this._config.layers.push(layerInfo);
@@ -178,37 +179,52 @@ export class SliderManager {
 
             // wait for all promises to resolve then initialize the slider
             Promise.all(promises).then(values => {
-                // set limits
-                this._config.limit.min = Math.min.apply(null, values.map(item => item.limits).flat());
-                this._config.limit.max = Math.max.apply(null, values.map(item => item.limits).flat());
-
-                // set ranges from interval or from extracted values
-                let range = [];
-                if (this._config.rangeInterval !== -1) {
-                    range = [this._config.limit.min, this._config.limit.min + this._config.rangeInterval];
-                } else {
-                    range = [Math.min.apply(null, values.map(item => item.range).flat()), Math.max.apply(null, values.map(item => item.range).flat())];
-                }
-
-                if (this._config.range.min === null && this._config.range.max === null && (!isNaN(range[0]) && !isNaN(range[1]))) {
-                    if (!this._config.startRangeEnd) {
-                        this._config.range.min = range[0];
-                        this._config.range.max = range[1];
-                    } else {
-                        this._config.range.min = this._config.limit.max - (range[1] - range[0]);
-                        this._config.range.max = this._config.limit.max;
-                    }
-                }
-
-                // set the static item array (remove duplicate) and reorder (not lexicographic so use function)
-                const staticItems = [...new Set(values.map(item => item.staticItems).flat())];
-                this._config.limit.staticItems = typeof staticItems === 'undefined' ? [] : staticItems.sort((a, b) => { return a - b });
-
                 // only initialize if the promises resolve to something
-                if (values.length > 0) this.initializeSlider();
+                if (values[0] !== false) {
+                    // set limits
+                    this._config.limit.min = Math.min.apply(null, values.map(item => item.limits).flat());
+                    this._config.limit.max = Math.max.apply(null, values.map(item => item.limits).flat());
+
+                    // set ranges from interval or from extracted values
+                    let range = [];
+                    if (this._config.rangeInterval !== -1) {
+                        range = [this._config.limit.min, this._config.limit.min + this._config.rangeInterval];
+                    } else {
+                        range = [Math.min.apply(null, values.map(item => item.range).flat()), Math.max.apply(null, values.map(item => item.range).flat())];
+                    }
+
+                    if (this._config.range.min === null && this._config.range.max === null && (!isNaN(range[0]) && !isNaN(range[1]))) {
+                        if (!this._config.startRangeEnd) {
+                            this._config.range.min = range[0];
+                            this._config.range.max = range[1];
+                        } else {
+                            this._config.range.min = this._config.limit.max - (range[1] - range[0]);
+                            this._config.range.max = this._config.limit.max;
+                        }
+                    } else { this._config.range = this._config.limit; }
+
+                    // set the static item array (remove duplicate) and reorder (not lexicographic so use function)
+                    const staticItems = [...new Set(values.map(item => item.staticItems).flat())];
+                    this._config.limit.staticItems = typeof staticItems === 'undefined' ? [] : staticItems.sort((a, b) => { return a - b });
+
+                    this.initializeSlider();
+                }
             });
 
         } else {
+            // set ranges from interval, limits or from range values
+            if (this._config.rangeInterval !== -1) {
+                if (!this._config.startRangeEnd) {
+                    this._config.range.min = this._config.limit.min;
+                    this._config.range.max = this._config.limit.min + this._config.rangeInterval;
+                } else {
+                    this._config.range.min = this._config.limit.max - this._config.rangeInterval;
+                    this._config.range.max = this._config.limit.max;
+                }
+            } else if (this._config.range.min === null || this._config.range.max === null) {
+               this._config.range = this._config.limit;
+            }
+
             this.initializeSlider();
         }
     }
@@ -251,48 +267,50 @@ export class SliderManager {
                 response.text().then(text => {
                     // TODO: use more info like start and end field for time extent and information to setup static item from TimeInfo
                     // parse to JSON and get timeInfo
-                    const timeInfo = JSON.parse(text).timeInfo
+                    const timeInfo = JSON.parse(text).timeInfo;
 
-                    // if time field not set, do it
-                    if (item.layerInfo.field === '') item.layerInfo.field = timeInfo.startTimeField;
+                    if (typeof timeInfo !== 'undefined') {
+                        // if time field not set, do it
+                        if (item.layerInfo.field === '') item.layerInfo.field = timeInfo.startTimeField;
 
-                    // set limits
-                    const limits = timeInfo.timeExtent;
+                        // set limits
+                        const limits = timeInfo.timeExtent;
 
-                    // set range (interval)
-                    const timeInterval = timeInfo.timeInterval === null || timeInfo.timeInterval === 0 ? 1 : timeInfo.timeInterval;
-                    const intervals = {
-                        esriTimeUnitsHours: 3600000,
-                        esriTimeUnitsDays: 86400000,
-                        esriTimeUnitsWeeks: 604800000,
-                        esriTimeUnitsMonths: 2592000000,
-                        esriTimeUnitsYears: 31536000000
-                    }
-
-                    // if type of interval is not define check limits and set a default
-                    let interval = intervals[timeInfo.timeIntervalUnits];
-                    if (typeof interval === 'undefined') {
-                        const rangeDays = (limits[1] - limits[0]) / (3600000 * 24);
-                        if (rangeDays < 7) {
-                            interval =  intervals.esriTimeUnitsHours;
-                        } else if (rangeDays < 31) {
-                            interval =  intervals.esriTimeUnitsDays;
-                        } else if (rangeDays < 60) {
-                            interval =  intervals.esriTimeUnitsWeeks;
-                        } else if (rangeDays < 365) {
-                            interval =  intervals.esriTimeUnitsMonths;
-                        } else {
-                            interval =  intervals.esriTimeUnitsYears;
+                        // set range (interval)
+                        const timeInterval = timeInfo.timeInterval === null || timeInfo.timeInterval === 0 ? 1 : timeInfo.timeInterval;
+                        const intervals = {
+                            esriTimeUnitsHours: 3600000,
+                            esriTimeUnitsDays: 86400000,
+                            esriTimeUnitsWeeks: 604800000,
+                            esriTimeUnitsMonths: 2592000000,
+                            esriTimeUnitsYears: 31536000000
                         }
-                    }
 
-                    // if delta limits is smaller then a weeks, set precision as hour
-                    this._config.precision = ((limits[1] - limits[0]) < 604800000) ? 'hour' : 'date';
+                        // if type of interval is not define check limits and set a default
+                        let interval = intervals[timeInfo.timeIntervalUnits];
+                        if (typeof interval === 'undefined') {
+                            const rangeDays = (limits[1] - limits[0]) / (3600000 * 24);
+                            if (rangeDays < 7) {
+                                interval =  intervals.esriTimeUnitsHours;
+                            } else if (rangeDays < 31) {
+                                interval =  intervals.esriTimeUnitsDays;
+                            } else if (rangeDays < 60) {
+                                interval =  intervals.esriTimeUnitsWeeks;
+                            } else if (rangeDays < 365) {
+                                interval =  intervals.esriTimeUnitsMonths;
+                            } else {
+                                interval =  intervals.esriTimeUnitsYears;
+                            }
+                        }
 
-                    // apply range from limits
-                    const range = [limits[0], limits[0] + (timeInterval * interval)];
+                        // if delta limits is smaller then a weeks, set precision as hour
+                        this._config.precision = ((limits[1] - limits[0]) < 604800000) ? 'hour' : 'date';
 
-                    resolve({ range, limits });
+                        // apply range from limits
+                        const range = [limits[0], limits[0] + (timeInterval * interval)];
+
+                        resolve({ range, limits });
+                    } else resolve(false);
                 });
             });
         });
@@ -317,30 +335,32 @@ export class SliderManager {
                 // get time dimension
                 // TODO: support more dimension like elevation
                 const dimensions = this.getDimensionsWMS(subLayersIds, parsed.wms_capabilities.capability[0].layer[0], [])
-                let discoveredDimensions = [].concat(...dimensions);
+                if (dimensions.length !== 0) {
+                    let discoveredDimensions = [].concat(...dimensions);
 
-                // get limits, interval and static items
-                let limits = discoveredDimensions.map(d => d.extent.extent).flat();
-                let arrInterval = discoveredDimensions.map(d => d.extent.interval).flat().filter(Number);
-                let arrStatic = discoveredDimensions.map(d => d.extent.static).flat();
+                    // get limits, interval and static items
+                    let limits = discoveredDimensions.map(d => d.extent.extent).flat();
+                    let arrInterval = discoveredDimensions.map(d => d.extent.interval).flat().filter(Number);
+                    let arrStatic = discoveredDimensions.map(d => d.extent.static).flat();
 
-                // apply range from limits
-                const staticItems = typeof arrStatic !== 'undefined' ? arrStatic : [];
-                let range = [];
-                if (arrInterval.length > 0 && arrInterval[0] !== null) {
-                    let startTime = limits[0];
-                    let endTime = limits[1]
-                    while (startTime <= endTime) {
-                        startTime = startTime + arrInterval[0];
-                        staticItems.push(startTime);
+                    // apply range from limits
+                    const staticItems = typeof arrStatic !== 'undefined' ? arrStatic : [];
+                    let range = [];
+                    if (arrInterval.length > 0 && arrInterval[0] !== null) {
+                        let startTime = limits[0];
+                        let endTime = limits[1]
+                        while (startTime <= endTime) {
+                            startTime = startTime + arrInterval[0];
+                            staticItems.push(startTime);
+                        }
+                        range = [limits[0], limits[0] + arrInterval[0]];
+                    } else {
+                        limits = staticItems;
+                        range = [limits[0], staticItems[0] + arrInterval[0]];
                     }
-                    range = [limits[0], limits[0] + arrInterval[0]];
-                } else {
-                    limits = staticItems;
-                    range = [limits[0], staticItems[0] + arrInterval[0]];
-                }
 
-                resolve({ range, limits, staticItems });
+                    resolve({ range, limits, staticItems });
+                } else resolve(false);
             })
         });
     }
@@ -491,7 +511,7 @@ export class SliderManager {
         // initialize slider bar and apply limits/range
         this._slider = new SliderBar(this._mapApi, this._config, this._myBundle);
         this._slider.limit = this._config.limit;
-        this._slider.range = this._config.range.min !== null && this._config.range.max !== null ? this._config.range : this._config.limit;
+        this._slider.range = this._config.range;
         this.setSliderBar();
     }
 
