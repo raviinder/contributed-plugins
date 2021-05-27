@@ -33,8 +33,8 @@ export const DESC_BAR_TEMPLATE = `
         class="md-icon-button primary"
         ng-click="ctrl.show()">
         <md-tooltip>{{ !ctrl.isShow ? 'plugins.rangeSlider.bar.show' : 'plugins.rangeSlider.bar.hide' | translate }}</md-tooltip>
-        <md-icon ng-if="ctrl.isShow">${createSVG('hide')}</md-icon>
-        <md-icon ng-if="!ctrl.isShow">${createSVG('show')}</md-icon>
+        <md-icon ng-if="ctrl.isShow">${createSVG('show')}</md-icon>
+        <md-icon ng-if="!ctrl.isShow">${createSVG('hide')}</md-icon>
     </md-button>
 </div>`;
 
