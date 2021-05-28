@@ -15,6 +15,8 @@ Inside your configuration file you need
         "maximizeDesc": true,
         "autorun": false,
         "loop": true,
+        "reverse": false,
+        "lock: false,
         "controls": ["lock", "loop", "delay", "export", "refresh", "reverse"],
         "params": {
           "delay": 3000,
@@ -44,6 +46,8 @@ Configuration parameters
 - maximizeDesc: boolean to specify if the description section is maximized by default.
 - autorun: boolean to start the animation automatically (if true, open should be true as well).
 - loop: boolean to restart automatically the animation when it reaches the end of the array.
+- reverse: boolean to set the reverse play option (if true, play will go from right to left).
+- lock: the left handle (play regular side) or right handle (play reverse side) is locked.
 - controls: string array who contains needed controls. Order inside the array has no effect:
     - lock: lock or unlock left anchor when step or play.
     - loop: loop the animation.
