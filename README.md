@@ -64,3 +64,16 @@ These plugins come bundled with the RAMP core library. Links are provided here t
 - [Coordinate Info](https://github.com/fgpv-vpgf/fgpv-vpgf/tree/master/packages/ramp-plugin-coordinate-info) - Displays details about the co-ordinates of a clicked point
 - [Custom Export](https://github.com/fgpv-vpgf/fgpv-vpgf/tree/master/packages/ramp-plugin-custom-export) - Allows custom export templates to be constructed
 - [Enhanced Table](https://github.com/fgpv-vpgf/fgpv-vpgf/tree/master/packages/ramp-plugin-enhanced-table) - A data table for attributes with filtering capabilities
+
+## Dependabot PR
+
+We regularly have Dependapot PR to solve dependencies issues with some, if not all the plugins. To make it easier to solve them all at once, do the following: 
+
+- Create an issue.
+- Create a new branch.
+- Run buildAll bash file
+- Add the files (git add *), then check with git status if package-lock.json files have been updated.
+- Commit the modifications.
+- Push your branch and do a PR.
+
+This will solve all the issues and prepare a new version of js and css to use.

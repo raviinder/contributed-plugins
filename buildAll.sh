@@ -8,8 +8,11 @@ do
     echo "Start process on $plugin"
     cd $plugin
     npm install > /dev/null 2>&1
+    npm audit fix > /dev/null 2>&1
+    echo "Install and audit done"
     npm run build > /dev/null 2>&1
     npm run deploy > /dev/null 2>&1
+    echo "Build and deploy done"
     cd ..
     echo "End process on $plugin"
 done
