@@ -1,6 +1,6 @@
 # build all plugins from this list. Add your own folder plugin to build
 # package.json must exist with the build and deploy command
-plugins=("chart" "draw" "range-slider" "swiper" "thematic-slider")
+plugins=("chart" "draw" "my-first-plugin" "range-slider" "swiper" "thematic-slider")
 
 echo "Start build all process!"
 for plugin in "${plugins[@]}"
