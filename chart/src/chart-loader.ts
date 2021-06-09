@@ -2,11 +2,7 @@ import { ChartPie } from './chart-pie';
 import { ChartBar } from './chart-bar';
 import { ChartLine } from './chart-line';
 
-import {
-    CHART_TEMPLATE,
-    CANVAS_TEMPLATE,
-    NO_DATA_TEMPLATE
-} from './template';
+import { CANVAS_TEMPLATE } from './template';
 
 import * as chartjs from 'chart.js';
 import * as nouislider from 'nouislider';

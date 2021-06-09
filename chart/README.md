@@ -86,10 +86,10 @@ Configuration parameters
   - title: title of the axis
   - values: name field to get the labels (only for type field)
   - split: character to use to split the labels (only for type field)
-options: chart options
+- options: chart options
   - colors: array of hexadecimal color values to use to display the chart
   - cutOut: percentage to cut for the hole in a pie chart
-layers: array of layers to use to create chart
+- layers: array of layers to use to create chart
   - id: layer id as define in layer section.
   - nameField: the field use to set the value in the selector (when multiple features creates each one a chart).
   - type: the type of info (inline for items inside the layer or link for items inside a link table).
@@ -100,7 +100,7 @@ layers: array of layers to use to create chart
     - measure: field name to use for the measure to create the chart. It must be the field name, not the alias.
     - linkType: how data is structure inside the link table (single for one field for value and one for date OR multi if there is multiple datasets inside one field and the chart needs to parse)
     - link: link field to link between layer and table
-    - date: data field
+    - date: date field
     - label: object to customize the label creation
       - type: how to retreive the labels from (field or config)
       - values: config = string of values to use separated by semi colon (e.g "lbl1;lbl2;lbl3") or field = field name
