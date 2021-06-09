@@ -50,13 +50,14 @@ export class ChartParser {
                 const field = feature.data.find((val: any) => val.field === layerConfig.linkField);
                 const wrap = (field.type === 'esriFieldTypeString') ? '\'' : '';
                 $.ajax({
-                    url: `${layerConfig.linkUrl}/query?where=${layerConfig.data[0].link}=${wrap}${field.value}${wrap}&outFields=*&f=json`,
+                    url: `${layerConfig.linkUrl}/query?where=${layerConfig.data[0].link}=${wrap}${field.value}${wrap}&outFields=*&orderByFields=${layerConfig.data[0].date}&f=json`,
                     cache: false,
                     dataType: 'jsonp',
                     success: data => resolve(data)
                 });
             }).then((data: any) => {
                 const fieldType = layerConfig.data[0].linkType;
+
                 if (fieldType === 'single') {
                     feature = ChartParser.processSingleLinkedData(config, feature, data);
                 } else if (fieldType === 'multi') {
