@@ -59,7 +59,10 @@ export class ChartParser {
                 const fieldType = layerConfig.data[0].linkType;
 
                 if (fieldType === 'single') {
-                    feature = ChartParser.processSingleLinkedData(config, feature, data);
+                    // loop trough all the data object for this layer and add the info
+                    for (let [index, dataset] of config.layers[0].data.entries()) {
+                        feature = ChartParser.processSingleLinkedData(config, feature, data, index, undefined);
+                    }
                 } else if (fieldType === 'multi') {
                     feature = ChartParser.processMultipleLinkedData(config, feature, data);
                 }
@@ -85,7 +88,7 @@ export class ChartParser {
         // extract values to use to create datasets
         let arrValues = [];
         for(let feature of data.features) {
-            arrValues.push(feature.attributes.VARIABLE_NAME);
+            arrValues.push(feature.attributes[config.layers[0].data[0].values]);
         }
         arrValues = _.uniqBy(arrValues);
 
@@ -110,7 +113,7 @@ export class ChartParser {
                 'suffix': layerConfig.data[0].suffix
             });
 
-            feature = ChartParser.processSingleLinkedData(config, feature, data, value);
+            feature = ChartParser.processSingleLinkedData(config, feature, data, 0, value);
         }
 
         // remove first item (related to feature configuration) then replace the config for this layer
@@ -128,21 +131,21 @@ export class ChartParser {
      * @param {Any} config the plugin config
      * @param {Any} feature the clicked feature
      * @param {Any} data the related data from the link table
+     * @param {Number} index index of data object 
      * @param {String} attrValue optional attribute value to parse info inside linked data array
      * @preturn {Any} feature the updated feature
      */
-    private static processSingleLinkedData(config: any, feature: any, data: any, attrValue?: string): any {
+    private static processSingleLinkedData(config: any, feature: any, data: any, index: number = 0, attrValue?: string): any {
         const layerConfig = ChartParser.getLayerConfig(config, feature.layerId);
-
-        // TODO, loop layerConfig data as well... Or maybe pass the data id and loop this one level higher
         const values = [];
+
         data.features.forEach((feat: any) => {
-            if (typeof attrValue === 'undefined' || attrValue === feat.attributes[layerConfig.data[0].values]) {
-                values.push(`(${new Date(feat.attributes[layerConfig.data[0].date]).toJSON().slice(0,10)},${feat.attributes[layerConfig.data[0].measure]})`);
+            if (typeof attrValue === 'undefined' || attrValue === feat.attributes[layerConfig.data[index].values]) {
+                values.push(`(${new Date(feat.attributes[layerConfig.data[index].date]).toJSON().slice(0,10)},${feat.attributes[layerConfig.data[index].measure]})`);
             }
         });
 
-        const measureField = (typeof attrValue === 'undefined')? layerConfig.data[0].measure : attrValue;
+        const measureField = (typeof attrValue === 'undefined')? layerConfig.data[index].measure : attrValue;
         feature.data.push({
             key: measureField,
             value: values.join(','),
