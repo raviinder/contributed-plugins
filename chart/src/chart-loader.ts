@@ -271,22 +271,29 @@ export class ChartLoader {
         this.destroy();
 
         this._lineChartOptions = new ChartLine(config, attrs);
-        this.draw(this._lineChartOptions);
 
-        // if it is a line chart, we assume they use date as x values so we add a date slider
-        if (this._lineChartOptions.datasets.length !== 0 && (config.axis.xAxis.type === 'date' || config.axis.xAxis.type === 'linear')) {
-            this._sliderX = document.getElementById('nouisliderX');
-            const rangeX = this._lineChartOptions.rangeX;
+        // check if there is data for the graph.... if not remove dataset so the draw will show no avialable info
+        if (this._lineChartOptions.data.datasets.length !== 0 && this._lineChartOptions.data.datasets[0].data.length === 0) {
+            this._lineChartOptions.data.datasets.splice(0, this._lineChartOptions.data.datasets.length);
+            this.draw(this._lineChartOptions);
+        } else {
+            this.draw(this._lineChartOptions);
 
-            if (config.axis.xAxis.type === 'date') {
-                rangeX.min = rangeX.min.getTime();
-                rangeX.max = rangeX.max.getTime()
+            // if it is a line chart, we assume they use date as x values so we add a date slider
+            if (this._lineChartOptions.datasets.length !== 0 && (config.axis.xAxis.type === 'date' || config.axis.xAxis.type === 'linear')) {
+                this._sliderX = document.getElementById('nouisliderX');
+                const rangeX = this._lineChartOptions.rangeX;
+
+                if (config.axis.xAxis.type === 'date') {
+                    rangeX.min = rangeX.min.getTime();
+                    rangeX.max = rangeX.max.getTime()
+                }
+                this.initSlider(this._sliderX, rangeX.min, rangeX.max, config.axis.xAxis.type, config.language);
+
+                this._sliderY = document.getElementById('nouisliderY');
+                const rangeY = this._lineChartOptions.rangeY;
+                this.initSlider(this._sliderY, rangeY.min, rangeY.max, config.axis.yAxis.type, config.language);
             }
-            this.initSlider(this._sliderX, rangeX.min, rangeX.max, config.axis.xAxis.type, config.language);
-
-            this._sliderY = document.getElementById('nouisliderY');
-            const rangeY = this._lineChartOptions.rangeY;
-            this.initSlider(this._sliderY, rangeY.min, rangeY.max, config.axis.yAxis.type, config.language);
         }
     }
 
