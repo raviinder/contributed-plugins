@@ -70,9 +70,13 @@ export class ChartLoader {
      * @param {Number} max maximum value for slider
      * @param {String} xType the x axis type, date or linear
      * @param {String} language the viewer language
+     * @param {Number} length the length of linear value
      */
-    initSlider(slider: any, min: number, max: number, type: string, language: string) {
+    initSlider(slider: any, min: number, max: number, type: string, language: string, length: number) {
         const delta = Math.abs(max - min);
+
+        // create the step
+        const step = 1 / (Math.pow(10, length));
 
         // create a slider only if there is thing to slide.
         if (delta > 0) {
@@ -82,17 +86,17 @@ export class ChartLoader {
                     behaviour: 'drag-tap',
                     connect: true,
                     snap: false,
-                    tooltips: this.setTooltips(type, language),
-                    range: { min: Math.round(min), max: Math.ceil(max) },
+                    tooltips: this.setTooltips(type, language, length),
+                    range: { min: min, max: max },
                     orientation: (slider.id.slice(-1) === 'X') ? 'horizontal' : 'vertical',
                     direction: (slider.id.slice(-1) === 'X') ? 'ltr' : 'rtl',
-                    step: (slider.id.slice(-1) === 'X') ? 604800000 : 0.1, // if x axis, step by week
+                    step: (slider.id.slice(-1) === 'X') ? 604800000 : step, // if x axis, step by week
                     pips: {
                         mode: 'positions',
                         values: [0, 25, 50, 75, 100],
                         density: 3,
                         format: {
-                            to: (value: number) => { return this.formatPips(value, type, language); },
+                            to: (value: number) => { return this.formatPips(value, type, language, length); },
                             from: Number
                         }
                     }
@@ -103,10 +107,10 @@ export class ChartLoader {
 
             // trap the on change event when user use handles
             let that = this;
-            slider.noUiSlider.on('set.one', function(values: string[]) {;
+            slider.noUiSlider.on('set.one', function(valuesString: string[], temp: number, valuesNum: number[]) {;
                 // set min and max from the slider values
-                let min: any = parseFloat(values[0]);
-                let max: any = parseFloat(values[1]);
+                let min: any = valuesNum[0];
+                let max: any = valuesNum[1];
 
                 const axis = (this.options.orientation === 'horizontal') ? 'x' : 'y';
                 const type = (axis === 'x') ? (<any>that)._xType : (<any>that)._yType;
@@ -133,12 +137,14 @@ export class ChartLoader {
      * Set pips (slider labels) format
      * @function formatPips
      * @param {Any} value the value to display (number, string or date)
+     * @param {String} type the pips type (date or linear)
      * @param {String} lang the language to use
+     * @param {Number} length the length of linear pips
      * @return {any} value the formated value
      */
-    formatPips(value: any, type, lang: string): any {
+    formatPips(value: any, type: string, lang: string, length: number): any {
         if (type === 'linear') {
-            value = value.toFixed(2);
+            value = value.toFixed(length);
         } else if (type === 'date') {
             let date = new Date(value);
 
@@ -157,11 +163,12 @@ export class ChartLoader {
      * @function setTooltips
      * @param {string} type type of tooltips (will be pass to format pips function) 
      * @param {string} language the viewer language
+     * @param {Number} length the length of tooltips
      * @return {Object[]} tooltips as an array of tooltip object
      */
-    setTooltips(type: string, language: string): object[] {
-        const tooltips = [{ to: (value: number) => this.formatPips(value, type, language), from: Number }]
-        tooltips.push({ to: (value: number) => this.formatPips(value, type, language), from: Number })
+    setTooltips(type: string, language: string, length: number): object[] {
+        const tooltips = [{ to: (value: number) => this.formatPips(value, type, language, length), from: Number }]
+        tooltips.push({ to: (value: number) => this.formatPips(value, type, language, length), from: Number })
 
         return tooltips;
     }
@@ -198,7 +205,7 @@ export class ChartLoader {
         for (let value of data) {
             let x = (typeof value.x === 'string') ? parseFloat(value.x) : value.x;
             let y = (typeof value.y === 'string') ? parseFloat(value.y) : value.y;
-            if (x >= xRange.min && x <= xRange.max && y >= yRange.min && y <= yRange.max) { parsed.push(value); }
+            if (x >= xRange.min && x <= xRange.max && y >= yRange.min && y <= yRange.max || isNaN(y) && x >= xRange.min && x <= xRange.max) { parsed.push(value); }
         }
 
         return parsed;
@@ -288,11 +295,25 @@ export class ChartLoader {
                     rangeX.min = rangeX.min.getTime();
                     rangeX.max = rangeX.max.getTime()
                 }
-                this.initSlider(this._sliderX, rangeX.min, rangeX.max, config.axis.xAxis.type, config.language);
+                this.initSlider(this._sliderX, rangeX.min, rangeX.max, config.axis.xAxis.type, config.language, 0);
+
+                // get number of decimal for step and pips
+                const countDecimals = (values: any) => {
+                    let numZero = 0;
+
+                    values.forEach((value) => {
+                        let val = parseFloat(value.y);
+                        if (Math.floor(val) !== val && !(isNaN(val)))
+                        numZero = val.toString().split('.')[1].length  > numZero ? val.toString().split('.')[1].length : numZero;
+                    });
+
+                    return numZero;
+                }
+                const numZeroMax = countDecimals(this._lineChartOptions.datasets[0]);
 
                 this._sliderY = document.getElementById('nouisliderY');
                 const rangeY = this._lineChartOptions.rangeY;
-                this.initSlider(this._sliderY, rangeY.min, rangeY.max, config.axis.yAxis.type, config.language);
+                this.initSlider(this._sliderY, rangeY.min, rangeY.max, config.axis.yAxis.type, config.language, numZeroMax);
             }
         }
     }
