@@ -94,10 +94,10 @@ export class SliderManager {
                     this.setupConfiguredLayer(layers);
                 }
             } else if (ids.length === 0) {
-                // if there is no configured layer, check if the new added layer
+                // if there is no configured layer, check if the new added layer is time aware
                 // initialize the layer name so we set index and timer only once
                 if (layerId === '') {
-                    index = (layer.type === 'esriFeature') ? 0 : layer._viewerLayer.layerInfos.length - 1;
+                    index = (layer.type === 'esriFeature' || layer.type === 'esriImage') ? 0 : layer._viewerLayer.layerInfos.length - 1;
                     layerId = layer.id
                 }
 
@@ -167,12 +167,12 @@ export class SliderManager {
 
                 // will be use if the user doesn't specified if layer as time aware. If time aware, information will be extracted from time dimension
                 if (item.layerInfo.isTimeAware) {
-                    if (layerType === 'esriDynamic' || layerType === 'esriFeature') {
+                    if (layerType === 'esriDynamic' || layerType === 'esriFeature' || layerType === 'esriImage') {
                         promises.push(this.setTimeESRILimits(item));
                     } else if (layerType === 'ogcWms') {
                         promises.push(this.setTimeWMSLimits(item));
                     }
-                } else if (layerType === 'esriDynamic' || layerType === 'esriFeature') {
+                } else if (layerType === 'esriDynamic' || layerType === 'esriFeature' || layerType === 'esriImage') {
                     promises.push(this.settNotTimeAwareLimits(item));
                 }
             }
@@ -277,7 +277,8 @@ export class SliderManager {
                         const limits = timeInfo.timeExtent;
 
                         // set range (interval)
-                        const timeInterval = timeInfo.timeInterval === null || timeInfo.timeInterval === 0 ? 1 : timeInfo.timeInterval;
+                        const timeInterval = timeInfo.timeInterval === null || timeInfo.timeInterval === 0 || timeInfo.defaultTimeInterval === null || timeInfo.defaultTimeInterval === 0 ?
+                            1 : timeInfo.timeInterval || timeInfo.defaultTimeInterval;
                         const intervals = {
                             esriTimeUnitsHours: 3600000,
                             esriTimeUnitsDays: 86400000,
@@ -287,7 +288,7 @@ export class SliderManager {
                         }
 
                         // if type of interval is not define check limits and set a default
-                        let interval = intervals[timeInfo.timeIntervalUnits];
+                        let interval = intervals[timeInfo.timeIntervalUnits || timeInfo.defaultTimeIntervalUnits];
                         if (typeof interval === 'undefined') {
                             const rangeDays = (limits[1] - limits[0]) / (3600000 * 24);
                             if (rangeDays < 7) {
