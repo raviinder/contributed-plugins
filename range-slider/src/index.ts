@@ -132,7 +132,7 @@ RangeSlider.prototype.translations = {
                 gif: 'If enabled, click \"Play\" to start then \"Pause\" to finish then disable the control to export GIF'
             },
             unit: "Units",
-            esriImageNote: 'NOTE: Only the last handle will affect the layer visibility. The first handle is use to set the interval for controls.'
+            esriImageNote: 'NOTE: In some cases, only the last handle may affect the layer visibility. The first handle will be use to set the interval for controls.'
         }
     },
 
@@ -162,7 +162,7 @@ RangeSlider.prototype.translations = {
                 gif: 'Si activé, cliquez sur \"Jouer\" pour démarrer, puis sur \"Pause\" pour terminer et désactiver le contrôle pour exporter le GIF'
             },
             unit: "Unitées",
-            esriImageNote: 'REMARQUE: seule la dernière molette affectera la visibilité de la couche. La première molette est utilisée pour définir l\'intervalle pour les contrôles.'
+            esriImageNote: 'REMARQUE: dans certains cas, seule la dernière molette peut affecter la visibilité de la couche. La première molette est alors utilisée pour définir l\'intervalle pour les contrôles.'
         }
     }
 };
