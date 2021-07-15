@@ -26,6 +26,9 @@ export default class RangeSlider {
         extendConfig.language = this._RV.getCurrentLang();
         extendConfig.translations = RangeSlider.prototype.translations[this._RV.getCurrentLang()];
 
+        // add proxy url
+        extendConfig.proxyUrl = this._RV.getConfig('services').proxyUrl;
+
         // get ESRI TimeExtent dependency (for image server and ESRI time aware layer - TimeInfo) and start slider creation
         let myBundlePromise = (<any>window).RAMP.GAPI.esriLoadApiClasses([['esri/TimeExtent', 'timeExtent']]);
         myBundlePromise.then(myBundle => {
