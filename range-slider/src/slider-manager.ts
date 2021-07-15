@@ -97,9 +97,13 @@ export class SliderManager {
                 // if there is no configured layer, check if the new added layer is time aware
                 // initialize the layer name so we set index and timer only once
                 if (layerId === '') {
-                    index = (layer.type === 'esriFeature' || layer.type === 'esriImage') ? 0 : layer._viewerLayer.layerInfos.length - 1;
+                    index = (layer.type === 'esriFeature' || layer.type === 'esriImage') ? 0 : 
+                        typeof layer._viewerLayer.layerInfos !== 'undefined' ? layer._viewerLayer.layerInfos.length - 1 : layer._viewerLayer.esriLayer.layerInfos.length - 1;
                     layerId = layer.id
                 }
+
+                // set wmst type for the slider if the layer is wms
+                if (layer.type === 'ogcWms') this._config.type = 'wmst';
 
                 // create layer info
                 // ! we assume it is time aware, we will query metadata to know if it is the case
@@ -329,7 +333,8 @@ export class SliderManager {
         });
 
         return new Promise(resolve => {
-            const uri = `${item.layer.esriLayer.url}?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0&layer=${subLayersIds.join(',')}`;
+            const proxy = typeof this._config.proxyUrl !== 'undefined' ? `${this._config.proxyUrl}?` : '';
+            const uri = `${proxy}${item.layer.esriLayer.url}?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0&layer=${subLayersIds.join(',')}`;
             fetch(encodeURI(uri)).then(response => response.text())
             .then(str => this._xmlParser.parseStringPromise(str))
             .then(parsed => {
@@ -360,7 +365,13 @@ export class SliderManager {
                         range = [limits[0], staticItems[0] + arrInterval[0]];
                     }
 
-                    resolve({ range, limits, staticItems });
+                    // check if the range and limits are valid before resolve
+                    if (isNaN(limits[0]) || isNaN(limits[1])) {
+                        console.log(`Not able to set limits, it needs two valid non identical limits. Check time info format from getCapabilities for this service: ${item.layer.esriLayer.url}?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0&layer=${subLayersIds.join(',')}`);
+                        resolve(false);
+                    } else {
+                        resolve({ range, limits, staticItems });
+                    }
                 } else resolve(false);
             })
         });
@@ -415,6 +426,9 @@ export class SliderManager {
             .map((l) => {
                 let properties = l['$'] || {};
                 let content = l['_'];
+
+                this._config.precision = (content.split('T').length === 1) ? 'date' : 'hour';
+
                 return {
                     id: layer.name[0],
                     default: properties.default,
@@ -442,6 +456,17 @@ export class SliderManager {
             const dynamicExt = extent.split('/');
             limits.extent = [new Date(dynamicExt[0]).getTime(), new Date(dynamicExt[1]).getTime()];
 
+            //! Trap bad format for time info dimension.... will have to refine on new cases arrival
+            if (isNaN(limits[1])) {
+                if (extent.length === 9) {
+                    // it can be this format "2000-2016"
+                    const type1 = extent.split('-');
+                    limits.extent = [new Date(type1[0]).getTime(), new Date(type1[1]).getTime()];
+                } else if (extent.length === 4) {
+                    // it can be this format "2015", so just add a second limit (1/2)
+                    limits.extent = [new Date(extent).getTime(), new Date(extent).getTime() + (1000 * 60 * 60 * 12)];
+                }
+            }
             // parse ISO string representation (ex. 'P1Y2M')
             let isoInterval = dayjs.duration(dynamicExt[2]).$ms;
 
@@ -498,7 +523,7 @@ export class SliderManager {
      */
     isDiscreteExtent(strExtent: string): boolean {
         const arrExtent = strExtent.split(',').map((v) => v.trim());
-        return dayjs.utc(arrExtent[0]).isValid();
+        return dayjs.utc(arrExtent[0]).isValid() && arrExtent.length > 1;
     };
 
     /**

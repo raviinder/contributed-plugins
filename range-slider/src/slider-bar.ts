@@ -801,7 +801,11 @@ export class SliderBar {
                     } else if (this._config.type === 'wmst') {
                         const dates = this.getDate(range, 'wmst');
                         const query = (this._rangeType === 'single') ? `${dates[0]}` : `${dates[0]}/${dates[1]}`;
-                        mapLayer.esriLayer.setCustomParameters({}, { 'TIME':query });
+
+                        //! This is a patch for WMS query who uses the ESRI EPSG code 102100 instead of 3857
+                        // TODO: Remove when solve in the core
+                        const queryObj = (this._mapApi.esriMap.extent.spatialReference.wkid === 3857 || this._mapApi.esriMap.extent.spatialReference.wkid === 102100) ? { 'TIME':query, 'CRS':'EPSG:3857' } : { 'TIME':query };
+                        mapLayer.esriLayer.setCustomParameters({}, queryObj);
 
                         // NOTE: WMS Time parameter seems to be related to how the service let the data be searched
                         // https://www.mapserver.org/ogc/wms_time.html#supported-time-requests
@@ -880,6 +884,7 @@ export class SliderBar {
      * @return {String}formated date
      */
     getDateWMTS(date: Date): string {
-        return dayjs.utc(date).format();
+        // get only the part of the date needed for the query from the precision
+        return this._config.precision === 'date' ? dayjs.utc(date).format().split('T')[0] : dayjs.utc(date).format();
     }
 }
