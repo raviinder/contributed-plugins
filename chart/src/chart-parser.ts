@@ -49,6 +49,10 @@ export class ChartParser {
                 // get the value to look for in the linked table
                 const field = feature.data.find((val: any) => val.field === layerConfig.linkField);
                 const wrap = (field.type === 'esriFieldTypeString') ? '\'' : '';
+
+                // manage ' character in field value
+                field.value = field.value.replaceAll("'", "''");
+
                 $.ajax({
                     url: `${layerConfig.linkUrl}/query?where=${layerConfig.data[0].link}=${wrap}${field.value}${wrap}&outFields=*&orderByFields=${layerConfig.data[0].date}&f=json`,
                     cache: false,
