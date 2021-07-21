@@ -151,7 +151,7 @@ export class DetailsManager {
     * @param {Any} event the click event or an object that mimick it. Contains the active layer name and the details to show
     */
     clickDetails(event: any) {
-        const panel: HTMLElement = document.getElementById('mainDetails');
+        const panel: HTMLElement = document.querySelector('[id^=mainDetails-]');
         const layerName: string = (<HTMLElement>panel.getElementsByClassName('md-title')[0]).innerText;
         const subContent: HTMLCollectionOf<Element> = panel.getElementsByClassName('rv-subcontent');
         const subSection: HTMLCollectionOf<Element> = panel.getElementsByClassName('rv-subsection');
