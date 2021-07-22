@@ -30,13 +30,13 @@ export class SliderControls {
             const setHTML = (isMax: boolean) => {
                 // remove the collapse class when slider is minimized and put it back if need be
                 if (!isMax) {
-                    document.getElementById(`rangeSlider-${that.mapApi.id}`).classList.remove('collapsed');
+                    document.querySelector('[id^=rangeSlider]').classList.remove('collapsed');
                 } else if (isMax && !that.descVisible) {
-                    document.getElementById(`rangeSlider-${that.mapApi.id}`).classList.add('collapsed');
+                    document.querySelector('[id^=rangeSlider]').classList.add('collapsed');
                 }
 
-                document.getElementById(`rangeSlider-${that.mapApi.id}`).parentElement.classList.toggle('slider-min-ui');
-                document.getElementById(`rangeSlider-${that.mapApi.id}`).getElementsByClassName('slider-minmax-control')[0].children[0].classList.toggle('slider-max-control-icon');
+                document.querySelector('[id^=rangeSlider]').parentElement.classList.toggle('slider-min-ui');
+                document.querySelector('[id^=rangeSlider]').getElementsByClassName('slider-minmax-control')[0].children[0].classList.toggle('slider-max-control-icon');
             };
 
             this.isMax = slider.maximize;
@@ -53,7 +53,7 @@ export class SliderControls {
 
         mapApi.agControllerRegister('DescSliderCtrl', function() {
             const setHTML = () => {
-                const sliderCtrl = document.getElementById(`rangeSlider-${that.mapApi.id}`);
+                const sliderCtrl = document.querySelector('[id^=rangeSlider]');
                 if (this.isShow) {
                     sliderCtrl.classList.remove('collapsed')
                 } else {
