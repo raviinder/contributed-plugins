@@ -83,7 +83,8 @@ export class ChartControls {
         }
 
         // set focus on the close button.
-        const element = $(`#chart-${this.mapApi.id} .rv-header .md-button`)[0];
+
+        const element = document.querySelector('[id^=chart] .rv-header .md-button');
         (<any>element).rvFocus();
     }
 
