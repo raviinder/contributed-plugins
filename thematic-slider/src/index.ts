@@ -4,6 +4,7 @@ export default class ThematicSlider {
     private _button: any;
     private _panel: SliderPanel;
     private _panelDetails: any;
+    private _id: string;
 
     /**
     * Plugin init
@@ -15,10 +16,12 @@ export default class ThematicSlider {
 
         // set details panel event on opening and closing to show/hide details and thematic panel
         this._panelDetails = mapApi.panelRegistryObj.details;
+        this._id = this.mapApi.id;
+        const that = this;
         this._panelDetails.opening.subscribe(() => {
-            document.getElementById('thematicSlider').style.zIndex = '-10'; });
+            document.getElementById(`thematicSlider-${that._id}`).style.zIndex = '-10'; });
         this._panelDetails.closing.subscribe(() => {
-            document.getElementById('thematicSlider').style.zIndex = '50'; });
+            document.getElementById(`thematicSlider-${that._id}`).style.zIndex = '50'; });
 
         // get config and add language
         this.config = this._RV.getConfig('plugins').thematicSlider;

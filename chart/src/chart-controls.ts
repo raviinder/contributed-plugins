@@ -62,7 +62,7 @@ export class ChartControls {
         });
 
         // add the control to panel header
-        panel.header._header.find('.rv-header-content')[0].append(this.compileTemplate(CHART_SELECT_TEMPLATE)[0]);
+        panel.header._header.find('.rv-header-content')[0].after(this.compileTemplate(CHART_SELECT_TEMPLATE)[0]);
     }
 
     /**
@@ -83,7 +83,7 @@ export class ChartControls {
         }
 
         // set focus on the close button.
-        const element = $('#chart .rv-header .md-button')[0];
+        const element = $(`#chart-${this.mapApi.id} .rv-header .md-button`)[0];
         (<any>element).rvFocus();
     }
 
