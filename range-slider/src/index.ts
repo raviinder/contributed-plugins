@@ -1,4 +1,3 @@
-import { SLIDER_TEMPLATE } from './template';
 import { SliderManager } from './slider-manager';
 
 export default class RangeSlider {
@@ -9,11 +8,6 @@ export default class RangeSlider {
     */
     init(mapApi: any) {
         this.mapApi = mapApi;
-
-        // create panel
-        this.panel = this.mapApi.panels.create('rangeSlider');
-        this.panel.element.css(RangeSlider.prototype.panelOptions);
-        this.panel.body = SLIDER_TEMPLATE;
 
         // get slider configuration then add/merge needed configuration
         const config = this._RV.getConfig('plugins').rangeSlider;
@@ -32,7 +26,7 @@ export default class RangeSlider {
         // get ESRI TimeExtent dependency (for image server and ESRI time aware layer - TimeInfo) and start slider creation
         let myBundlePromise = (<any>window).RAMP.GAPI.esriLoadApiClasses([['esri/TimeExtent', 'timeExtent']]);
         myBundlePromise.then(myBundle => {
-            new SliderManager(mapApi, this.panel, extendConfig, myBundle);
+            new SliderManager(mapApi, this.panel, extendConfig, myBundle, RangeSlider.prototype.panelOptions);
         });
     }
 

@@ -6,7 +6,8 @@ import {
     PLAY_BAR_TEMPLATE,
     REFRESH_BAR_TEMPLATE,
     DELAY_BAR_TEMPLATE,
-    EXPORT_BAR_TEMPLATE
+    EXPORT_BAR_TEMPLATE,
+    SLIDER_TEMPLATE
 } from './template';
 
 import { SliderControls } from './slider-controls';
@@ -39,6 +40,7 @@ export class SliderManager {
     private _panel: any;
     private _config: any;
     private _myBundle: any;
+    private _panelOptions: any;
     private _slider: SliderBar;
 
     private _button: any;
@@ -52,12 +54,14 @@ export class SliderManager {
      * @param {Any} panel the slider panel
      * @param {Any} config the slider configuration
      * @param {Any} myBundle the esri dependencies bundle
+     * @param {Any} panelOptions the css to apply to the panel
      */
-    constructor(mapApi: any, panel: any, config: any, myBundle: any) {
+    constructor(mapApi: any, panel: any, config: any, myBundle: any, panelOptions: any) {
         this._mapApi = mapApi;
         this._panel = panel;
         this._config = config;
         this._myBundle = myBundle;
+        this._panelOptions = panelOptions;
 
         // setup the xml to json parser use to read WMS getCap
         this._xmlParser = new Parser({
@@ -76,9 +80,6 @@ export class SliderManager {
         let timerId = undefined;
 
         // when a layer is added, check if it is a needed one
-        // TODO: There is a bug in 3.3.x where the aray of layer is not define for WMS-T sample and make it crash. Use version 3.2 solve the problem for the moment
-        // but is not a suitable solution. Will have to get back to ECCC
-        // Happend only with http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r-t.cgi
         this._mapApi.layersObj.layerAdded.subscribe((layer: any) => {
             // if it is the right layer, add it to the array of layers
             if (ids.indexOf(layer.id) !== -1) {
@@ -93,7 +94,7 @@ export class SliderManager {
                 if (nbLayers === this._config.layers.length) {
                     this.setupConfiguredLayer(layers);
                 }
-            } else if (ids.length === 0 && typeof layer.type !== "undefined") {
+            } else if (ids.length === 0 && typeof layer.type !== 'undefined') {
                 // if there is no configured layer, check if the new added layer is time aware
                 // initialize the layer name so we set index and timer only once
                 if (layerId === '') {
@@ -127,6 +128,41 @@ export class SliderManager {
                 ids = ['done'];
             }
         });
+
+        // when we remove a layer check if we need to remove the slider
+        this._mapApi.layersObj.layerRemoved.subscribe((layer: any) => {
+            // case for configure layer.... remove from array
+            if (ids[0].length > 0) {
+                const index = ids.indexOf(layer.id);
+                if (index !== -1) {
+                    ids.splice(index, 1);
+                    layers.splice(index, 1);
+                    nbLayers--;
+                }
+            }
+
+            // if array is empty or it was a time aware added layer destroy
+            if (ids.length === 0 || ids[0] === 'done') {
+                // reset the definition query and destroy the plugin
+                this._slider.resetDefinitionQuery();
+                this._slider.destroy();
+                this._panel.destroy();
+                document.querySelector(`[aria-label="${this._button.label}"]`).remove();
+
+                // reset the config object and parameters
+                this._config.type = 'date';
+                this._config.range = { min: null, max: null };
+                this._config.limit = { min: null, max: null };
+                this._config.limits = [];
+                this._config.units = '';
+                this._config.description = '';
+                this._config.layers = [];
+
+                // empty ids and layers so the plugins will reset themself from a time aware layer
+                ids = [];
+                layers.splice(0, 1);
+            }
+        });
     }
 
     /**
@@ -135,6 +171,11 @@ export class SliderManager {
      * @param {Layer[]} layers Array of layers to setup
      */
     setupConfiguredLayer(layers: Layer[]): void {
+        // create panel
+        this._panel = this._mapApi.panels.create('rangeSlider');
+        this._panel.element.css(this._panelOptions);
+        this._panel.body = SLIDER_TEMPLATE;
+
         // add info for units, layers and field use
         const units = this._config.units !== '' ? ` - ${this._config.translations.bar.unit}: ${this._config.units}` : '';
         const layersInfo = layers.map((item) => { return `${item.layer.name} (${item.layerInfo.field})` });
