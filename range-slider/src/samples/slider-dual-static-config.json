@@ -280,7 +280,7 @@
           "range": { "min": 400, "max": 1000 },
           "limit": { "min": 200, "max": 2100, "staticItems": [400, 750, 1000, 1375, 1550, 1800, 2000] },
           "units": "",
-          "description": ""
+          "description": "WARNING: the default behaviour is reverse play... The lock handle is the right one so the step foward will never pass the right handle value."
         },
         "layers": [{
           "id": "1",
