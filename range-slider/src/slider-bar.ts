@@ -317,6 +317,13 @@ export class SliderBar {
     }
 
     /**
+     * Destroy the nouislider
+     */
+    destroy(): void {
+        this._slider.noUiSlider.destroy();
+    }
+
+    /**
      * Remove pips overlap
      * @function removePipsOverlaps
      */
