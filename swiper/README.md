@@ -37,7 +37,6 @@ In the body section, you need to have a map div. You need to replace the id with
     rv-langs='["en-CA", "fr-CA"]'
     rv-plugins="swiper"
 >
-```
 
 ## Test page
 To play with the code, from the plugin folder, do npm install, run build then npm run serve.
