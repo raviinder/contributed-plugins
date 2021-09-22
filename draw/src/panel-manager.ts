@@ -318,13 +318,13 @@ export class PanelManager {
         $('.esriMapTooltip').css({ top: `${y - 50}px`, left: `${x + 50}px`, display: 'block' });
 
         if (event.data.name === 'extent') {
-            if (event.which === 13 && event.data.draw.geometryLength === 0) { // enter extent starting point
-                event.data.draw.geometryLength = event.data.draw.geometryLength + 1;
+            if (event.which === 13 && event.data.draw.mapPoints.length === 0) { // enter extent starting point
+                event.data.draw.mapPoints = ['first'];
                 event.data.draw.simulateClick([x, y], 'mouse-drag-start'); 
-            } else if  (event.which >= 37 && event.which <= 40 && event.data.draw.geometryLength > 0) { // extent move
+            } else if  (event.which >= 37 && event.which <= 40 && event.data.draw.mapPoints.length > 0) { // extent move
                     event.data.draw.simulateClick([x, y], 'mouse-drag');
-            } else if (event.which === 32 && event.data.draw.geometryLength > 0) { // enter extent stopping point
-                event.data.draw.geometryLength = 0;
+            } else if (event.which === 32 && event.data.draw.mapPoints.length > 0) { // enter extent stopping point
+                event.data.draw.mapPoints = [];
                 event.data.draw.simulateClick([x, y], 'mouse-drag-end');
             }
         } else if (event.which === 13 ||
