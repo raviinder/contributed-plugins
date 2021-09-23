@@ -18,7 +18,7 @@ Inside your configuration file you need
 ```
 
 Configuration parameters
-- type: if swiper is vertical or horizontal (only vertical is supported at the moment).
+- type: if swiper is vertical or horizontal.
 - keyboardOffset: number of pixel to move the swiper when keyboard is use.
 - layers: array of layers id to use with the swiper.
 
