@@ -77,14 +77,12 @@ module.exports = function(variable={}, argv) {
         ],
 
         devServer: {
-            host: '0.0.0.0',
-            https: false,
-            disableHostCheck: true,
+            static: [path.join(__dirname, `../dist/${pluginName}`), path.join(__dirname, '../dist')],
+            watchFiles: [path.join(__dirname, `../dist/${pluginName}`)],
             port: 6001,
-            stats: { colors: true },
             compress: true,
-            contentBase: [path.join(__dirname, `../dist/${pluginName}`), path.join(__dirname, '../dist')],
-            watchContentBase: true
+            client: { webSocketURL: { hostname: '0.0.0.0', } },
+            liveReload: true,
         }
     };
 
