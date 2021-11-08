@@ -3,6 +3,8 @@ import { SliderControls } from './slider-controls';
 
 import { Observable, BehaviorSubject } from 'rxjs';
 
+const showdown = require('showdown');
+
 export class SliderPanel {
     private _mapApi: any;
     private _altText: string;
@@ -166,11 +168,13 @@ export class SliderPanel {
      * @function setPanelInfo
      */
     private setPanelInfo() {
+        let converter = new showdown.Converter();
+
         // set title
         this._panelSlider.header.title = this.active.title;
 
-        // set panel content, it will create the legend section
-        SliderPanel.setDescription({ desc: this.active.description, index: `${this._index + 1}/${this._layers.length}` });
+        SliderPanel.setDescription({ desc: converter.makeHtml(this.active.description), index: `${this._index + 1}/${this._layers.length}` });
+
     }
 
     /**
