@@ -158,7 +158,7 @@ RangeSlider.prototype.translations = {
             tooltip: {
                 gif: 'Si activé, cliquez sur \"Jouer\" pour démarrer, puis sur \"Pause\" pour terminer et désactiver le contrôle pour exporter le GIF'
             },
-            unit: "Unitées",
+            unit: "Unités",
             esriImageNote: 'REMARQUE: dans certains cas, seule la dernière molette peut affecter la visibilité de la couche. La première molette est alors utilisée pour définir l\'intervalle pour les contrôles.'
         }
     }
