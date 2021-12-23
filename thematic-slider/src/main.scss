@@ -1,0 +1,41 @@
+// set plugin sass style
+#thematicSlider .panel-body {
+    height: calc(100% - 86px);
+}
+
+.rv-thslider-legend {
+    padding: 5px 10px;
+    padding-bottom: 20px;
+
+    .rv-thslider-symbol {
+        display: flex;
+        height: 32px;
+
+        span {
+            align-self:center;
+        }
+    }
+}
+
+.rv-thslider-bar-control {
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+.rv-thslider-index {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
+}
+
+.rv-thslider-desc {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap !important;
+   img {
+        width: 200px;
+        height: 200px;
+   }
+}

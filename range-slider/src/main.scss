@@ -1,0 +1,310 @@
+@import '../node_modules/nouislider/distribute/nouislider.css';
+
+@mixin text-color {
+    color: #676767;
+}
+
+@mixin small-padding {
+    padding: 0px !important;
+}
+
+@mixin min-ui {
+    [id^='rangeSlider'] {
+        margin-left: auto !important;
+        margin-right: 60px !important;
+        width: max-content !important;
+        top: calc(100% - 110px) !important;
+        height: 40px !important;
+        opacity: 1 !important;
+
+        .panel-body {
+            @include small-padding;
+
+            .rv-rangeslider {
+                @include small-padding;
+
+                .slider-content {
+                    width: min-content;
+
+                    .slider-bar {
+                        @include small-padding;
+
+                        .slider-bar-noui, .slider-desc {
+                            display: none !important;
+                        }
+
+                        .slider-controls {
+                            .slider-export-control, .slider-refresh-control, .slider-delay-control, .slider-desc-control {
+                                display: none !important;
+                            }
+                        }
+                    }
+
+                    .slider-desc {
+                        display: none !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// noUI CSS Override
+.noUi-handle {
+    background-color: #c0c0c0;
+    &:focus {
+        .noUi-tooltip {
+            display: block;
+        }
+    }
+
+    &:before {
+        height: 10px;
+        top: 4px;
+        left: 10px;
+    }
+
+    &:after {
+        height: 10px;
+        top: 4px;
+        left: 12px;
+    }
+}
+
+.noUi-tooltip {
+    padding: 1px 4px;
+    display: none;
+}
+
+.noUi-horizontal {
+    height: 10px;
+
+    .noUi-tooltip {
+        top: 20px;
+        bottom: initial;
+    }
+
+    .noUi-handle {
+        height: 20px;
+        width: 26px;
+        right: -14px !important;
+    }
+}
+
+.noUi-pips-horizontal {
+    .noUi-value {
+        margin-top: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .noUi-marker-overlap {
+        height: 15px;
+        background-color: #ccc;
+    }
+
+    .noUi-value-overlap {
+        display: none;
+    }
+}
+
+// WCAG contrast for pips and label
+.noUi-pips {
+    @include text-color;
+
+    .noUi-marker-large {
+        height: 10px;
+        background-color: #8d8d8d;
+    }
+
+    .noUi-marker-normal {
+        background-color: #AAA;
+    }
+}
+
+input:focus + .noUi-tooltip { display: block; }
+
+// smaller then a laptop (Thresold is IPad Pro)
+@media screen and (max-width: 1024px) {
+ 
+    .slider-units {
+        display: none;
+    }
+
+    .slider-widget {
+        width: 100% !important;
+    }
+
+    .slider-controls {
+        .slider-export-control, .slider-refresh-control, .slider-delay-control, .slider-lock-control, .slider-loop-control, .slider-reverse-control {
+            display: none !important;
+        }
+    }
+
+    [id^='rangeSlider'] {
+        margin-left: 10px !important;
+    }
+}
+
+// range slider style
+.slider-min-ui {
+    @include min-ui;
+
+    .slider-controls {
+        margin-right: 30px;
+    }
+}
+
+[id^='rangeSlider'].panel-contents {
+    opacity: 0.7;
+    height: 180px;
+    top: calc(100% - 240px);
+
+    .panel-body {
+        height: auto;
+    }
+}
+
+[id^='rangeSlider']:hover, [id^='rangeSlider']:focus-within {
+    opacity: 1;
+}
+
+[id^='rangeSlider'].collapsed {
+    height: 108px;
+    top: calc(100% - 165px);
+}
+
+.rv-rangeslider {
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px 0px;
+
+    .slider-content {
+        overflow: hidden;
+        width: 100%;
+        flex-direction: row;
+
+        .slider-minmax-control {
+            right: 2px;
+            position: absolute;
+            top: 1px;
+            transform: translate(11px, -5px) rotate(225deg);
+
+            .slider-max-control-icon {
+                transform: rotate(180deg);
+            }
+        }
+
+        .slider-settings {
+
+            .slider-global {
+                display: flex;
+                height: 40px;
+            }
+
+            .slider-layers {
+                display: flex;
+                height: 40px;
+            }
+        }
+
+        .slider-bar {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 5px 40px 0px;
+
+            .slider-bar-noui {
+                width: 100%;
+                height: 50px;
+            }
+
+            .slider-controls {
+                display: flex;
+
+                .slider-bar-control {
+                    display: flex;
+                    align-items: center;
+                    height: 40px;
+
+                    md-input-container {
+                        display: inline-block;
+                        margin: 10px 0;
+                        width: 80px;
+                    }
+
+                    &.slider-desc-control {
+                        md-icon {
+                            height: 16px;
+                        }
+                    }
+
+                    &.slider-loop-control .slider-loop-control-active {
+                        color: black;
+                        opacity: 1;
+                    }
+
+                    &.slider-play-control {
+                        margin: auto
+                    }
+
+                    &.slider-delay-control {
+                        display: inline-block;
+                    }
+
+                    &.slider-switch {
+                        margin: 0;
+                        flex-direction: row-reverse;
+                        div:last-of-type {
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+
+            .slider-widget {
+                width: 93%;
+            }
+
+            &.no-units {
+                .slider-widget {
+                    width: 100%;
+                }
+                .slider-units {
+                    width: 1px;
+                    visibility: hidden;
+                }
+            }
+
+            &.hours-labels {
+                padding-left: 70px;
+                padding-right: 70px;
+            }
+  
+            .slider-units {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                right: 40px;
+                position: absolute;
+                @include text-color;
+                word-break: break-all;
+                padding-left: 5px;
+                word-break: break-all;
+                width: 5%;
+                top: 15px;
+            }
+        }
+    }
+
+    .slider-desc {
+        @include text-color;
+        overflow: auto;
+        margin-top: 10px;
+        height: 60px;
+
+        span {
+            display: block;
+        }
+    }
+ }
