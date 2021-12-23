@@ -351,6 +351,11 @@ export class ChartLoader {
             title: {
                 display: false
             },
+            layout: {
+                padding: {
+                   right: 50
+                }
+            },
             legend: {
                 labels: {
                     fontColor: '#676767',
