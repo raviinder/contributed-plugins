@@ -376,7 +376,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   .rv-chart-panel .rv-chart-sliderY {
     display: flex;
     height: 80%;
-    padding-right: 100px; }
+    padding-right: 80px; }
     .rv-chart-panel .rv-chart-sliderY #nouisliderY {
       height: inherit;
       align-self: center;
@@ -384,9 +384,9 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   .rv-chart-panel .rv-chart-canvas {
     height: 100% !important;
     display: flex;
-    width: 90%; }
+    width: 100%; }
   .rv-chart-panel .rv-chart-sliderX {
-    justify-content: left;
+    justify-content: center;
     display: flex;
     height: 60px; }
     .rv-chart-panel .rv-chart-sliderX #nouisliderX {
