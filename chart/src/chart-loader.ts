@@ -309,7 +309,8 @@ export class ChartLoader {
 
                     return numZero;
                 }
-                const numZeroMax = countDecimals(this._lineChartOptions.datasets[0]);
+                const numZeroMax = typeof config.axis.yAxis.precision !== 'undefined' ? config.axis.yAxis.precision 
+                                       : countDecimals(this._lineChartOptions.datasets[0]);
 
                 this._sliderY = document.getElementById('nouisliderY');
                 const rangeY = this._lineChartOptions.rangeY;
