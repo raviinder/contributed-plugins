@@ -35,13 +35,14 @@ export const CHART_TEMPLATE = `
     <div class="rv-chart-sliderY">
         <div id="nouisliderY"></div>
     </div>
-    <div padding-right: 100px; style="width:100%; display: flex; flex-direction: column;">
+    <div style="width:100%; display: flex; flex-direction: column;">
         <div class="rv-chart-canvas">
             ${CANVAS_TEMPLATE}
         </div>
         <div class="rv-chart-loading">
             ${LOADING_SPLASH_TEMPLATE}
         </div>
+        <div>
         <div class="rv-chart-sliderX">
             <div id="nouisliderX"></div>
         </div>

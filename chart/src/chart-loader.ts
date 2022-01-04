@@ -107,7 +107,8 @@ export class ChartLoader {
 
             // trap the on change event when user use handles
             let that = this;
-            slider.noUiSlider.on('set.one', function(valuesString: string[], temp: number, valuesNum: number[]) {;
+            slider.noUiSlider.on('set.one', function (valuesString: string[], temp: number, valuesNum: number[]) {
+                ;
                 // set min and max from the slider values
                 let min: any = valuesNum[0];
                 let max: any = valuesNum[1];
@@ -122,11 +123,11 @@ export class ChartLoader {
                 for (let [i, dataset] of that._chart.data.datasets.entries()) {
                     dataset.data = that.parseDatasetsRange((<any>that)._xRange, (<any>that)._yRange, that._lineChartOptions.datasets[i]);
                 }
-    
+
                 // update the chart
                 that._chart.update();
             });
-    
+
             // add handles to focus cycle
             $('.noUi-handle-lower').attr('tabindex', '-2');
             $('.noUi-handle-upper').attr('tabindex', '-2');
@@ -304,13 +305,13 @@ export class ChartLoader {
                     values.forEach((value) => {
                         let val = parseFloat(value.y);
                         if (Math.floor(val) !== val && !(isNaN(val)))
-                        numZero = val.toString().split('.')[1].length  > numZero ? val.toString().split('.')[1].length : numZero;
+                            numZero = val.toString().split('.')[1].length > numZero ? val.toString().split('.')[1].length : numZero;
                     });
 
                     return numZero;
                 }
-                const numZeroMax = typeof config.axis.yAxis.precision !== 'undefined' ? config.axis.yAxis.precision 
-                                       : countDecimals(this._lineChartOptions.datasets[0]);
+                const numZeroMax = typeof config.axis.yAxis.precision !== 'undefined' ? config.axis.yAxis.precision
+                    : countDecimals(this._lineChartOptions.datasets[0]);
 
                 this._sliderY = document.getElementById('nouisliderY');
                 const rangeY = this._lineChartOptions.rangeY;
@@ -351,11 +352,6 @@ export class ChartLoader {
             },
             title: {
                 display: false
-            },
-            layout: {
-                padding: {
-                   right: 50
-                }
             },
             legend: {
                 labels: {
@@ -427,16 +423,16 @@ export class ChartLoader {
         const parsed = { datasets: [] };
 
         // TODO: work around for CFS do not keep as is for production
-        const parseDate = function(dateString: string): Date {
+        const parseDate = function (dateString: string): Date {
             // check date to add month and day if not present. At the same time add dashes if missing
             if (dateString.length === 4) { dateString = `${dateString}-01-01`; }
-            else if (dateString.length === 5) { dateString = `${dateString.substring(0,4)}-0${dateString.substring(4, 6)}`; }
-            else if (dateString.length === 6 && dateString.indexOf('-') === -1) { dateString = `${dateString.substring(0,4)}-${dateString.substring(4, 6)}`; }
-            else if (dateString.length === 6 && dateString.indexOf('-') !== -1) { dateString = `${dateString.substring(0,5)}0${dateString.substring(5, 6)}`; }
+            else if (dateString.length === 5) { dateString = `${dateString.substring(0, 4)}-0${dateString.substring(4, 6)}`; }
+            else if (dateString.length === 6 && dateString.indexOf('-') === -1) { dateString = `${dateString.substring(0, 4)}-${dateString.substring(4, 6)}`; }
+            else if (dateString.length === 6 && dateString.indexOf('-') !== -1) { dateString = `${dateString.substring(0, 5)}0${dateString.substring(5, 6)}`; }
             else if (dateString.length === 7 && dateString.indexOf('-') === -1) { dateString = `${dateString}-01`; }
-            else if (dateString.length === 8 && dateString.indexOf('-') === -1) { dateString = `${dateString.substring(0,4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}`; }
+            else if (dateString.length === 8 && dateString.indexOf('-') === -1) { dateString = `${dateString.substring(0, 4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}`; }
 
-            return  new Date(`${dateString.trim()}T00:00:00`);
+            return new Date(`${dateString.trim()}T00:00:00`);
         }
 
         // loop trough datasets to add from config
@@ -463,7 +459,7 @@ export class ChartLoader {
                         suffix: suffix,
                         prefix: prefix
                     };
-    
+
                     // loop trough values
                     if (data.type === 'single') {
                         parse = parse.toString().split(data.split);
@@ -474,13 +470,13 @@ export class ChartLoader {
                         let parseCombValues = parse.replace(new RegExp(data.regex, 'g'), '*').split('*').filter(Boolean);
                         for (let val of parseCombValues) {
                             let splitVal = val.split(data.split);
-    
+
                             // force time to get the right day or use number
                             let valueParsed = (xType === 'linear') ? splitVal[0] : parseDate(splitVal[0]);
                             item.data.push({ x: valueParsed, y: splitVal[1] });
                         }
                     }
-    
+
                     parsed.datasets.push(item);
                 }
             }

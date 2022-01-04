@@ -130,7 +130,7 @@
     & .rv-chart-sliderY {
         display: flex;
         height: 80%;
-        padding-right: 80px;
+        padding-right: 70px;
         & #nouisliderY {
             height: inherit;
             align-self: center;
@@ -141,15 +141,14 @@
     & .rv-chart-canvas {
         height: 100% !important;
         display: flex;
-        width: 95%;
+        width: 97%;
     }
 
     & .rv-chart-sliderX {
         justify-content: left;
         display: flex;
         height: 60px;
-        padding-left: 20px;
-        padding-right: 20px;
+        margin-left: 40px;
 
         & #nouisliderX {
             width: 95%;
