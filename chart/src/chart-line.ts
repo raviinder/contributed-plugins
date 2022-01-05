@@ -87,7 +87,8 @@ export class ChartLine {
         // get data for the graph and keep a copy for line chart with time
         // we have a slider to refine the graph by years
         this.data = ChartLoader.parse(layerData, attrs, colors, xType);
-
+        const  datasets = this.data.datasets
+        this.data.datasets = _.orderBy(datasets, ['label'], ['desc'])
         // for each dataset, set options
         for (let [i, dataset] of this.data.datasets.entries()) {
              // convert data to number
