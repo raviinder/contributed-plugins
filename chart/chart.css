@@ -384,14 +384,14 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   .rv-chart-panel .rv-chart-canvas {
     height: 100% !important;
     display: flex;
-    width: 98%; }
+    width: 97%; }
   .rv-chart-panel .rv-chart-sliderX {
     justify-content: left;
     display: flex;
     height: 60px;
     margin-left: 40px; }
     .rv-chart-panel .rv-chart-sliderX #nouisliderX {
-      width: 98%; }
+      width: 97%; }
 
 .rv-chart-details-value {
   padding: 8px 16px; }

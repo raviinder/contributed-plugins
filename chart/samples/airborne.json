@@ -933,7 +933,8 @@
             "title": "Concentration (mBq/m³)",
             "type": "linear",
             "values": "",
-            "split": ";"
+            "split": ";",
+            "precision": "6"
           }
         },
         "layers": [
