@@ -355,7 +355,7 @@ export class ChartLoader {
             },
             layout: {
                 padding: {
-                   right: 12
+                    right: 12
                 }
             },
             legend: {
@@ -445,48 +445,71 @@ export class ChartLoader {
             const fieldData = data.measure;
             const prefix = data.prefix;
             const suffix = data.suffix;
-            const values = attrs.data.find(i => i.field === fieldData).value;
+            const filteredData = attrs.data.find(i => i.field === fieldData);
+console.log(attrs.data, filteredData, fieldData);
+            if (typeof filteredData !== "undefined") {
+                // Old Pattern
+                const values = filteredData.value;
 
-            // if regex is provided, it is because there is multiple datasets in the value field
-            // only do this for single type where we can have more then 1 dataset by field
-            // for combine, there is 2 values by field (x and y). We do not support more then 1 dataset
-            let parseValues = (data.regex !== '' && data.type === 'single') ?
-                values.replace(new RegExp(data.regex, 'g'), '*').split('*').filter(Boolean) : [values];
+                // if regex is provided, it is because there is multiple datasets in the value field
+                // only do this for single type where we can have more then 1 dataset by field
+                // for combine, there is 2 values by field (x and y). We do not support more then 1 dataset
+                let parseValues = (data.regex !== '' && data.type === 'single') ?
+                    values.replace(new RegExp(data.regex, 'g'), '*').split('*').filter(Boolean) : [values];
 
-            // loop trough array of data inside a field values, first check if there is data to parse
-            if (parseValues[0] !== null) {
-                for (let [i, parse] of parseValues.entries()) {
-                    // add values and colors
+                // loop trough array of data inside a field values, first check if there is data to parse
+                if (parseValues[0] !== null) {
+                    for (let [i, parse] of parseValues.entries()) {
+                        // add values and colors
+                        const item: any = {
+                            data: [],
+                            label: data.label.values !== '' ? this.getLabels(data.label, attrs, i)[i] : '',
+                            backgroundColor: colors,
+                            suffix: suffix,
+                            prefix: prefix,
+                            isNewFormat: false
+                        };
+
+                        // loop trough values
+                        if (data.type === 'single') {
+                            parse = parse.toString().split(data.split);
+                            for (let value of parse) {
+                                item.data.push(value);
+                            }
+                        } else if (data.type === 'combine') {
+                            let parseCombValues = parse.replace(new RegExp(data.regex, 'g'), '*').split('*').filter(Boolean);
+                            for (let val of parseCombValues) {
+                                let splitVal = val.split(data.split);
+
+                                // force time to get the right day or use number
+                                let valueParsed = (xType === 'linear') ? splitVal[0] : parseDate(splitVal[0]);
+                                item.data.push({ x: valueParsed, y: splitVal[1] });
+                            }
+                        }
+                        parsed.datasets.push(item);
+                    }
+                }
+            }
+            else {
+                // New Pattern;
+                const doughnutData = attrs.data.slice(1).filter(x => x.value !== "");
+                const doughnutArray = doughnutData[0].value.split(';');
+                for (let i = 0, len = doughnutArray.length; i < len; i++) {
                     const item: any = {
                         data: [],
-                        label: data.label.values !== '' ? this.getLabels(data.label, attrs, i)[i] : '',
+                        label: '',
                         backgroundColor: colors,
                         suffix: suffix,
-                        prefix: prefix
+                        prefix: prefix,
+                        isNewFormat: true
                     };
-
-                    // loop trough values
-                    if (data.type === 'single') {
-                        parse = parse.toString().split(data.split);
-                        for (let value of parse) {
-                            item.data.push(value);
-                        }
-                    } else if (data.type === 'combine') {
-                        let parseCombValues = parse.replace(new RegExp(data.regex, 'g'), '*').split('*').filter(Boolean);
-                        for (let val of parseCombValues) {
-                            let splitVal = val.split(data.split);
-
-                            // force time to get the right day or use number
-                            let valueParsed = (xType === 'linear') ? splitVal[0] : parseDate(splitVal[0]);
-                            item.data.push({ x: valueParsed, y: splitVal[1] });
-                        }
+                    for (let j = 0, len = doughnutData.length; j < len; j++) {
+                        item.data.push(doughnutData[j].value.split(';')[i]);
                     }
-
                     parsed.datasets.push(item);
                 }
             }
         }
-
         return parsed;
     }
 
@@ -498,21 +521,28 @@ export class ChartLoader {
      * @param {Number} index the index to start initialize to 0 if not provided
      * @return {String[]} the array of labels
      */
-    static getLabels(config: any, attrs: any, index = 0): string[] {
-        let labels = config.split !== '' ? config.values.split(config.split) : config.values;
-        if (config.type === 'field') {
-            const field = (labels instanceof Array) ? labels[0] : labels;
-            const temp = attrs.data.find((i: any) => i.field === field).value;
-            labels = config.split !== '' ? temp.split(config.split) : temp;
-        }
+    static getLabels(config: any, attrs: any, isNewFormat: boolean = false, index = 0): string[] {
+        let labels = [];
+        if (!isNewFormat) {
+            labels = config.split !== '' ? config.values.split(config.split) : config.values;
+            if (config.type === 'field') {
+                const field = (labels instanceof Array) ? labels[0] : labels;
+                const temp = attrs.data.find((i: any) => i.field === field).value;
+                labels = config.split !== '' ? temp.split(config.split) : temp;
+            }
 
-        // labels needs to be an array, if not create an array of values
-        // this mean we need to create an array of index length to make sure
-        // to retreive the right value
-        if (!Array.isArray(labels)) {
-            labels = Array(index + 1).fill(labels);
+            // labels needs to be an array, if not create an array of values
+            // this mean we need to create an array of index length to make sure
+            // to retreive the right value
+            if (!Array.isArray(labels)) {
+                labels = Array(index + 1).fill(labels);
+            }
         }
-
+        else{
+            for (let j = 1, len = attrs.data.length; j < len; j++) {
+                labels.push(attrs.data[j].key);
+            }
+        }
         return labels;
     }
 }

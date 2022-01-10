@@ -24,7 +24,10 @@ export class ChartPie {
 
         // set labels options
         // if more labels are provided then the first datasets number of values, they will be striketrought
-        this.data.labels = ChartLoader.getLabels(config.labelsPie, attrs);
+        let isNewFormat = false;
+        if (this.data.datasets.length > 0)
+            isNewFormat = this.data.datasets[0].isNewFormat;
+        this.data.labels = ChartLoader.getLabels(config.labelsPie, attrs, isNewFormat);
 
         // add default colors if not set from config or data
         const colors = config.options.colors === '' ? ChartLoader.defaultColors : config.options.colors.split(';');
