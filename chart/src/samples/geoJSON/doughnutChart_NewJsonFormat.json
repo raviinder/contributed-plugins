@@ -12,7 +12,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [ -110, 55 ]
+        "coordinates": [
+          -110,
+          55
+        ]
       }
     },
     {
@@ -26,7 +29,27 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [ -100, 55 ]
+        "coordinates": [
+          -100,
+          55
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Red": "553",
+        "Green": "54",
+        "Blue": "32.553",
+        "Yellow": "5.43",
+        "Orrange": "55"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -150,
+          55
+        ]
       }
     },
     {
@@ -40,7 +63,10 @@
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [ -90, 55 ]
+        "coordinates": [
+          -90,
+          55
+        ]
       }
     }
   ]
