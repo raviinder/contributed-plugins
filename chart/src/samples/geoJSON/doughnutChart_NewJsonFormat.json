@@ -19,7 +19,7 @@
       "type": "Feature",
       "properties": {
         "Red": "553",
-        "Green": "54",
+        "Green": "54;67",
         "Blue": "32.553",
         "Yellow": "5.43",
         "Orrange": "55"
