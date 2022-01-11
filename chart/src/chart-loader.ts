@@ -446,7 +446,6 @@ export class ChartLoader {
             const prefix = data.prefix;
             const suffix = data.suffix;
             const filteredData = attrs.data.find(i => i.field === fieldData);
-console.log(attrs.data, filteredData, fieldData);
             if (typeof filteredData !== "undefined") {
                 // Old Pattern
                 const values = filteredData.value;
@@ -467,7 +466,7 @@ console.log(attrs.data, filteredData, fieldData);
                             backgroundColor: colors,
                             suffix: suffix,
                             prefix: prefix,
-                            isNewFormat: false
+                            isMultiField: false
                         };
 
                         // loop trough values
@@ -492,21 +491,24 @@ console.log(attrs.data, filteredData, fieldData);
             }
             else {
                 // New Pattern;
-                const doughnutData = attrs.data.slice(1).filter(x => x.value !== "");
-                const doughnutArray = doughnutData[0].value.split(';');
-                for (let i = 0, len = doughnutArray.length; i < len; i++) {
-                    const item: any = {
-                        data: [],
-                        label: '',
-                        backgroundColor: colors,
-                        suffix: suffix,
-                        prefix: prefix,
-                        isNewFormat: true
-                    };
-                    for (let j = 0, len = doughnutData.length; j < len; j++) {
-                        item.data.push(doughnutData[j].value.split(';')[i]);
+                // First item is "ObjectID" which is not the part of actual chart data.
+                const chartData = attrs.data.slice(1).filter(x => x.value !== "");
+                if (chartData.length > 0) {
+                    const chartDataItemArray = chartData[0].value.split(';');
+                    for (let i = 0, len = chartDataItemArray.length; i < len; i++) {
+                        const item: any = {
+                            data: [],
+                            label: '',
+                            backgroundColor: colors,
+                            suffix: suffix,
+                            prefix: prefix,
+                            isMultiField: true
+                        };
+                        for (let j = 0, len = chartData.length; j < len; j++) {
+                            item.data.push(chartData[j].value.split(';')[i]);
+                        }
+                        parsed.datasets.push(item);
                     }
-                    parsed.datasets.push(item);
                 }
             }
         }
@@ -521,9 +523,9 @@ console.log(attrs.data, filteredData, fieldData);
      * @param {Number} index the index to start initialize to 0 if not provided
      * @return {String[]} the array of labels
      */
-    static getLabels(config: any, attrs: any, isNewFormat: boolean = false, index = 0): string[] {
+    static getLabels(config: any, attrs: any, isMultiField: boolean = false, index = 0): string[] {
         let labels = [];
-        if (!isNewFormat) {
+        if (!isMultiField) {
             labels = config.split !== '' ? config.values.split(config.split) : config.values;
             if (config.type === 'field') {
                 const field = (labels instanceof Array) ? labels[0] : labels;
@@ -538,9 +540,9 @@ console.log(attrs.data, filteredData, fieldData);
                 labels = Array(index + 1).fill(labels);
             }
         }
-        else{
+        else {
             for (let j = 1, len = attrs.data.length; j < len; j++) {
-                labels.push(attrs.data[j].key);
+                labels.push(attrs.data[j].field);
             }
         }
         return labels;
