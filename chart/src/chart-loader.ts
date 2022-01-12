@@ -494,11 +494,11 @@ export class ChartLoader {
                 // First item is "ObjectID" which is not the part of actual chart data.
                 const chartData = attrs.data.slice(1).filter(x => x.value !== "");
                 if (chartData.length > 0) {
-                    const itemsWhichHaveMultipleValues = chartData.filter(x => x.value.indexOf(';') != -1)
+                    const itemsWithMultipleValues = chartData.filter(x => x.value.indexOf(';') != -1)
                     
                     let chartDataItemArray = [];
-                    if (itemsWhichHaveMultipleValues.length > 0)
-                        chartDataItemArray = itemsWhichHaveMultipleValues[0].value.split(';');
+                    if (itemsWithMultipleValues.length > 0)
+                        chartDataItemArray = itemsWithMultipleValues[0].value.split(';');
                     else
                         chartDataItemArray = chartData[0].value.split(';');
 
