@@ -91,7 +91,7 @@
       "layers": [
         {
           "id": "0",
-          "name": "Graphics",
+          "name": "Graphics3",
           "layerType": "esriFeature",
           "fileType": "geojson",
           "url": "https://raw.githubusercontent.com/raviinder/contributed-plugins/bug83/chart/src/samples/geoJSON/doughnutChart_NewJsonFormat.json"
@@ -253,9 +253,9 @@
         "type": "pie",
         "title": "My Custom Tilte",
         "labelsPie": {
-          "type": "field",
-          "values": "label",
-          "split": ";"
+          "type": "multifield",
+          "values": "",
+          "split": ""
         },
         "options": {
           "colors": "",
@@ -264,19 +264,60 @@
         "layers": [{
             "id": "0",
             "nameField": "OBJECTID",
+            "datatype":"multifield",
             "data": [{
               "type": "single",
-              "measure": "data",
+              "measure": "Red",
               "label": {
-                "type": "config",
+                "type": "fieldname",
                 "values": "",
                 "split": ";"
               },
-              "regex": "\\[|\\];\\[|\\]",
+              "regex": "",
               "split": ";",
               "prefix": "Custom",
               "suffix": "Color"
-            }],
+            },
+            {
+              "type": "single",
+              "measure": "Green",
+              "label": {
+                "type": "fieldname",
+                "values": "",
+                "split": ";"
+              },
+              "regex": "",
+              "split": ";",
+              "prefix": "Custom",
+              "suffix": "Color"
+            },
+            {
+              "type": "single",
+              "measure": "Blue",
+              "label": {
+                "type": "fieldname",
+                "values": "",
+                "split": ";"
+              },
+              "regex": "",
+              "split": ";",
+              "prefix": "Custom",
+              "suffix": "Color"
+            },
+            {
+              "type": "single",
+              "measure": "Yellow",
+              "label": {
+                "type": "fieldname",
+                "values": "",
+                "split": ";"
+              },
+              "regex": "",
+              "split": ";",
+              "prefix": "Custom",
+              "suffix": "Color"
+            }
+          ],
             "details": {
               "enabled": false,
               "value": ""
