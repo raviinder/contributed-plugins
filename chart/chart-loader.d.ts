@@ -138,7 +138,7 @@ export declare class ChartLoader {
      * @param {Number} index the index to start initialize to 0 if not provided
      * @return {String[]} the array of labels
      */
-    static getLabels(config: any, attrs: any, index?: number): string[];
+    static getLabels(config: any, attrs: any, index?: number, layersData?: any): string[];
 }
 export interface ChartLoader {
     defaultColors: string[];

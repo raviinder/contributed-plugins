@@ -258,7 +258,7 @@
           "split": ""
         },
         "options": {
-          "colors": "Red;Green;Blue;Yellow",
+          "colors": "",
           "cutOut": 20
         },
         "layers": [{
