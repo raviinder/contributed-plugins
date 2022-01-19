@@ -94,7 +94,7 @@
           "name": "Graphics3",
           "layerType": "esriFeature",
           "fileType": "geojson",
-          "url": "https://raw.githubusercontent.com/raviinder/contributed-plugins/newbug83/chart/src/samples/geoJSON/doughnutChart_NewJsonFormat.json"
+          "url": "https://raw.githubusercontent.com/raviinder/contributed-plugins/bug83/chart/src/samples/geoJSON/doughnutChart_NewJsonFormat.json"
         }
       ],
       "extentSets": [
@@ -253,9 +253,9 @@
         "type": "pie",
         "title": "My Custom Tilte",
         "labelsPie": {
-          "type": "multifield",
-          "values": "",
-          "split": ""
+          "type": "config",
+          "values": "Red;Green;Blue;Yellow",
+          "split": ";"
         },
         "options": {
           "colors": "",
