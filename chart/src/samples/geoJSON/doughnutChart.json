@@ -15,7 +15,7 @@
       {
         "type": "Feature",
         "properties": {
-          "data": "553;54;32.553;5.43;55",
+          "data": "553;54;32.553;;55",
           "label": "Red;Green;Blue;Yellow;Orange"
         },
         "geometry": {
