@@ -355,7 +355,7 @@ export class ChartLoader {
             },
             layout: {
                 padding: {
-                   right: 12
+                    right: 12
                 }
             },
             legend: {
@@ -502,10 +502,11 @@ export class ChartLoader {
                     suffix = j.suffix;
                     return j.measure === i.field;
                 })
-            ).map(obj => ({ ...obj, splitcount: obj.value.split(splitChar).length }));
-            console.log('chartData',chartData)
+            ).map(obj => ({ ...obj, splitcount: typeof obj.value !== 'undefined' ? obj.value.split(splitChar).length : 0 }));
+
             if (chartData.length > 0) {
-                let len = chartData.sort(function (x, y) {
+                const cloneChartData = JSON.parse(JSON.stringify(chartData));
+                let len = cloneChartData.sort(function (x, y) {
                     return y.splitcount - x.splitcount;
                 })[0].splitcount;
 
@@ -519,7 +520,8 @@ export class ChartLoader {
                         isMultiField: true
                     };
                     for (let j = 0, len = chartData.length; j < len; j++) {
-                        item.data.push(chartData[j].value.split(splitChar)[i]);
+                        if (typeof chartData[j].value !== 'undefined')
+                                item.data.push(chartData[j].value.split(splitChar)[i]);
                     }
                     parsed.datasets.push(item);
                 }
@@ -536,7 +538,7 @@ export class ChartLoader {
      * @param {Number} index the index to start initialize to 0 if not provided
      * @return {String[]} the array of labels
      */
-    static getLabels(config: any, attrs: any, index = 0): string[] {
+    static getLabels(config: any, attrs: any, index = 0, layersData: any = null): string[] {
         let labels = config.split !== '' ? config.values.split(config.split) : config.values;
         if (config.type === 'field') {
             const field = (labels instanceof Array) ? labels[0] : labels;
@@ -544,11 +546,11 @@ export class ChartLoader {
             labels = config.split !== '' ? temp.split(config.split) : temp;
         }
         else if (config.type === 'multifield') {
-        
+
             if (!(labels instanceof Array)) {
                 labels = [];
-                for (let j = 1, len = attrs.data.length; j < len; j++) {
-                    labels.push(attrs.data[j].field);
+                for (let j = 0, len = layersData.length; j < len; j++) {
+                    labels.push(layersData[j].measure);
                 }
             }
         }
