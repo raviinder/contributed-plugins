@@ -15,8 +15,8 @@
       {
         "type": "Feature",
         "properties": {
-          "data": "553;54;32.553;;55",
-          "label": "Red;Green;Blue;Yellow;Orange"
+          "data": "553;54;32.553;55",
+          "label": "Red;Green;Blue;Orange"
         },
         "geometry": {
           "type": "Point",
