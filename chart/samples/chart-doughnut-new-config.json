@@ -94,7 +94,7 @@
           "name": "Graphics3",
           "layerType": "esriFeature",
           "fileType": "geojson",
-          "url": "https://raw.githubusercontent.com/raviinder/contributed-plugins/bug83/chart/src/samples/geoJSON/doughnutChart_NewJsonFormat.json"
+          "url": "https://raw.githubusercontent.com/raviinder/contributed-plugins/83-multifield1/chart/src/samples/geoJSON/doughnutChart_NewJsonFormat.json"
         }
       ],
       "extentSets": [
