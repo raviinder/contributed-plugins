@@ -3,13 +3,6 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {
-        "Red": "92;553",
-        "Green": "43.54;54",
-        "Blue": "12.3;32.553",
-        "Yellow": "66;5.43",
-        "Orange": "75;55"
-      },
       "geometry": {
         "type": "Point",
         "coordinates": [
