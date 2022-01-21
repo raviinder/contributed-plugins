@@ -111,7 +111,7 @@
           "name": "Victoria",
           "layerType": "ogcWms",
           "featureInfoMimeType": "text/plain",
-          "url": "https://datacube.services.geo.ca/ows/aerial",
+          "url": "https://datacube.services.geo.ca/web/aerial.xml" ,
           "layerEntries": [{
                 "id": "victoria",
                 "name": "victoria"
@@ -123,7 +123,7 @@
           "name": "Halifax",
           "layerType": "ogcWms",
           "featureInfoMimeType": "text/plain",
-          "url": "https://datacube.services.geo.ca/ows/aerial",
+          "url": "https://datacube.services.geo.ca/web/aerial.xml",
           "layerEntries": [{
                 "id": "halifax",
                 "name": "halifax"
@@ -135,7 +135,7 @@
           "name": "Regina",
           "layerType": "ogcWms",
           "featureInfoMimeType": "text/plain",
-          "url": "https://datacube.services.geo.ca/ows/aerial",
+          "url": "https://datacube.services.geo.ca/web/aerial.xml",
           "layerEntries": [{
                 "id": "regina",
                 "name": "regina"
@@ -147,7 +147,7 @@
           "name": "Salish",
           "layerType": "ogcWms",
           "featureInfoMimeType": "text/plain",
-          "url": "https://datacube.services.geo.ca/ows/aerial",
+          "url": "https://datacube.services.geo.ca/web/aerial.xml",
           "layerEntries": [{
                 "id": "salish",
                 "name": "salish"

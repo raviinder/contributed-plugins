@@ -221,6 +221,7 @@ input:focus + .noUi-tooltip { display: block; }
 
             .slider-controls {
                 display: flex;
+                padding-top: 5px;
 
                 .slider-bar-control {
                     display: flex;
