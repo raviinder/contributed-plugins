@@ -142,7 +142,7 @@ Chart.prototype.translations = {
     },
     'fr-CA': {
         chartAria: 'Représentation du jeu de données de l\'élément à l\'aide d\'un graphique. Pour les lecteurs d\'écran, pour accéder à l\'ensemble des données, utilisez la représentation sous forme de tableau ou le panneau d\'information détaillé.',
-        noValidData: 'Pas de données valides pour créer le graphique!',
+        noValidData: 'Pas de donnée valide pour créer le graphique!',
         selectChart: 'Choisir le graphique',
         legendTooltip: 'Cliquez sur les éléments de la légende pour les afficher/masquer'
     }
