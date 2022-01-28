@@ -66,4 +66,5 @@ export declare class ChartParser {
      * @param {String} nameField the name to add to the selector
      */
     private static populateSelect;
+    static populateLabelSelect(selectedChart: string, $scope: any): void;
 }
