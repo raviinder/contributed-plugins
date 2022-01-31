@@ -105,9 +105,9 @@ export class ChartParser {
                 'values': value,
                 'date': layerConfig.data[0].date,
                 'label': {
-                  'type': 'config',
-                  'values': value,
-                  'split': ''
+                    'type': 'config',
+                    'values': value,
+                    'split': ''
                 },
                 'regex': '\\(|\\),\\(|\\)',
                 'split': ',',
@@ -196,5 +196,32 @@ export class ChartParser {
         ChartParser._chartAttrs.push({ index: Object.keys(tempObj)[0], key: tempObj[Object.keys(tempObj)[0]], chartType, feature, config});
         ChartParser._nbFeats++;
         ChartParser.setCharts(tempObj);
+    }
+
+    /**
+     * Populate the label selector control, the control will launch the chart creation
+     * @function populateSelectLabel
+     * @param {String} selectedChart selected chart from combo.
+     * @param {Any} self current object.
+     */
+    static populateLabelSelect(selectedChart: string, self: any): void {
+        const item = ChartParser._chartAttrs.find((val: any) => val.index === selectedChart);
+        if (item.chartType === 'line') {
+            const labelArrayLength = self.selectedLabel.length;
+            // setting all default lables at first load or when there is no selection.
+            item.config.layers[0].data = item.config.layers[0].data
+                .map((obj, i) => {
+                    let key = this.ascii(obj.measure);
+                    if (labelArrayLength === 0)
+                        self.selectedLabel.push(key);
+                    return ({ ...obj, key: key });
+                });
+            let labelData = JSON.parse(JSON.stringify(item.config.layers[0].data));
+            self.labels = labelData.sort((a, b) => (a.measure < b.measure) ? 1 : -1);
+        }
+    }
+
+    static ascii(content: string) {
+        return [...content].map(char => char.charCodeAt(0)).reduce((current, previous, i) => previous + current + i);
     }
 }
