@@ -66,5 +66,11 @@ export declare class ChartParser {
      * @param {String} nameField the name to add to the selector
      */
     private static populateSelect;
-    static populateLabelSelect(selectedChart: string, $scope: any): void;
+    /**
+     * Populate the label selector control, the control will launch the chart creation
+     * @function populateSelectLabel
+     * @param {String} selectedChart selected chart from combo.
+     * @param {Any} self current object.
+     */
+    static populateLabelSelect(selectedChart: string, self: any): void;
 }

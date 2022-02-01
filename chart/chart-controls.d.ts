@@ -22,6 +22,7 @@ export declare class ChartControls {
      * Create the chart
      * @function createChart
      * @param {String} selectedChart selected chart
+     * @param {Number} selectedLabel selected label
      */
     private createChart;
     /**
