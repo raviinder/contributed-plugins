@@ -73,4 +73,5 @@ export declare class ChartParser {
      * @param {Any} self current object.
      */
     static populateLabelSelect(selectedChart: string, self: any): void;
+    static ascii(content: string): number;
 }
