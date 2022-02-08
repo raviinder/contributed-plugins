@@ -29,18 +29,25 @@ export const CHART_SELECT_TEMPLATE = `
         </md-input-container>
     </div>
     <div class="rv-chart-select rv-chart-label-select"  style="float:left; display: none;" >
-        <md-input-container class="md-block" md-no-float flex>
+        <md-input-container class="md-block multiple-select" md-no-float flex style="display: none;">
             <label>{{ 'plugins.chart.selectLabel' | translate }}</label>
-<<<<<<< HEAD
-            <md-select
-=======
             <md-select multiple=""
->>>>>>> 4a77e85b166647d9923ea19d5a2259f5e94036e3
                 aria-label="{{ 'plugins.chart.selectLabel' | translate }}"
                 ng-model="ctrl.selectedLabel"
                 ng-change="ctrl.LabelChange()">
                 <md-option ng-repeat="label in ctrl.labels" ng-value="{{label.key}}">
-                    {{ label.measure }}
+                    {{ label.label.values }}
+                </md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="md-block single-select" md-no-float flex style="display: none;">
+            <label>{{ 'plugins.chart.selectLabel' | translate }}</label>
+            <md-select
+                aria-label="{{ 'plugins.chart.selectLabel' | translate }}"
+                ng-model="ctrl.selectedSingleLabel"
+                ng-change="ctrl.LabelChange()">
+                <md-option ng-repeat="label in ctrl.labels" ng-value="{{label.key}}">
+                    {{ label.label.values }}
                 </md-option>
             </md-select>
         </md-input-container>
