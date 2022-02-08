@@ -31,7 +31,11 @@ export const CHART_SELECT_TEMPLATE = `
     <div class="rv-chart-select rv-chart-label-select"  style="float:left; display: none;" >
         <md-input-container class="md-block" md-no-float flex>
             <label>{{ 'plugins.chart.selectLabel' | translate }}</label>
+<<<<<<< HEAD
             <md-select
+=======
+            <md-select multiple=""
+>>>>>>> 4a77e85b166647d9923ea19d5a2259f5e94036e3
                 aria-label="{{ 'plugins.chart.selectLabel' | translate }}"
                 ng-model="ctrl.selectedLabel"
                 ng-change="ctrl.LabelChange()">

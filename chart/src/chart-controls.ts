@@ -35,13 +35,17 @@ export class ChartControls {
         // ! DO NOT USE $scope because it makes the build version fails.
         // select option when there is more then 1 chart
         const that = this;
-        this.mapApi.agControllerRegister('ChartSelectCtrl', function() {
+        this.mapApi.agControllerRegister('ChartSelectCtrl', function () {
             // set selected chart and array of charts
             this.selectedChart = '';
             this.charts = {};
 
             // set label and label array.
+<<<<<<< HEAD
             this.selectedLabel = -1;
+=======
+            this.selectedLabel = [];
+>>>>>>> 4a77e85b166647d9923ea19d5a2259f5e94036e3
             this.labels = {};
 
             // get charts to populate the select option
@@ -51,7 +55,11 @@ export class ChartControls {
                 } else {
                     if (_.isEmpty(this.charts)) {
                         this.selectedChart = "0";
+<<<<<<< HEAD
                         (<any>that).createChart(this.selectedChart);
+=======
+                        (<any>that).createChart(this.selectedChart, this.selectedLabel);
+>>>>>>> 4a77e85b166647d9923ea19d5a2259f5e94036e3
                         ChartParser.populateLabelSelect(this.selectedChart, this);
 
                         // remove loading splash
@@ -63,14 +71,23 @@ export class ChartControls {
 
             // This actually populate the chart and labels combo in panel.
             this.selectChart = () => {
+<<<<<<< HEAD
                 (<any>that).createChart(this.selectedChart);
                 ChartParser.populateLabelSelect(this.selectedChart, this);
                 this.selectedLabel = -1;
+=======
+                (<any>that).createChart(this.selectedChart, this.selectedLabel);
+                ChartParser.populateLabelSelect(this.selectedChart, this);
+>>>>>>> 4a77e85b166647d9923ea19d5a2259f5e94036e3
             }
 
             // This actually populate the label in panel.
             this.LabelChange = () => {
+<<<<<<< HEAD
                 (<any>that).createChart(this.selectedChart, this.selectedLabel !== -1 ? this.selectedLabel : null);
+=======
+                (<any>that).createChart(this.selectedChart, this.selectedLabel);
+>>>>>>> 4a77e85b166647d9923ea19d5a2259f5e94036e3
             }
         });
 
@@ -84,11 +101,18 @@ export class ChartControls {
      * @param {String} selectedChart selected chart
      * @param {Number} selectedLabel selected label
      */
+<<<<<<< HEAD
     private createChart(selectedChart: string, selectedLabel: number = null): void {
         const item = JSON.parse(JSON.stringify(ChartParser._chartAttrs.find((val: any) => val.index === selectedChart)));
         if (selectedLabel !== null) {
             item.config.layers[0].data = item.config.layers[0].data.filter(e => e.key === selectedLabel);
         }
+=======
+    private createChart(selectedChart: string, selectedLabel: [number]): void {
+        const item = JSON.parse(JSON.stringify(ChartParser._chartAttrs.find((val: any) => val.index === selectedChart)));
+        if (item.chartType === 'line')
+            item.config.layers[0].data = item.config.layers[0].data.filter(i => selectedLabel.some(j => i.key === j));
+>>>>>>> 4a77e85b166647d9923ea19d5a2259f5e94036e3
         // create the chart from chart type
         if (item.chartType === 'pie') {
             this.loader.createPieChart(item.feature, item.config);

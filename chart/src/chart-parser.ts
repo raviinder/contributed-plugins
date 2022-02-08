@@ -105,9 +105,9 @@ export class ChartParser {
                 'values': value,
                 'date': layerConfig.data[0].date,
                 'label': {
-                  'type': 'config',
-                  'values': value,
-                  'split': ''
+                    'type': 'config',
+                    'values': value,
+                    'split': ''
                 },
                 'regex': '\\(|\\),\\(|\\)',
                 'split': ',',
@@ -207,10 +207,30 @@ export class ChartParser {
     static populateLabelSelect(selectedChart: string, self: any): void {
         const item = ChartParser._chartAttrs.find((val: any) => val.index === selectedChart);
         if (item.chartType === 'line') {
+<<<<<<< HEAD
             item.config.layers[0].data = item.config.layers[0].data.map((obj, i) => ({ ...obj, key: i }));
             let labelData = JSON.parse(JSON.stringify(item.config.layers[0].data));
             labelData.push({ 'measure': 'ALL', 'key': -1 });
             self.labels = labelData.sort((a, b) => (a.key < b.key) ? 1 : -1)
         }
     }
+=======
+            const labelArrayLength = self.selectedLabel.length;
+            // setting all default lables at first load or when there is no selection.
+            item.config.layers[0].data = item.config.layers[0].data
+                .map((obj, i) => {
+                    let key = this.ascii(obj.measure);
+                    if (labelArrayLength === 0)
+                        self.selectedLabel.push(key);
+                    return ({ ...obj, key: key });
+                });
+            let labelData = JSON.parse(JSON.stringify(item.config.layers[0].data));
+            self.labels = labelData.sort((a, b) => (a.measure < b.measure) ? 1 : -1);
+        }
+    }
+
+    static ascii(content: string) {
+        return [...content].map(char => char.charCodeAt(0)).reduce((current, previous, i) => previous + current + i);
+    }
+>>>>>>> 4a77e85b166647d9923ea19d5a2259f5e94036e3
 }
