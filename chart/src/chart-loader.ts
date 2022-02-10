@@ -328,7 +328,7 @@ export class ChartLoader {
     draw(opts: any): void {
         if (opts.data.datasets.length !== 0) {
             // extend chart options with global ones then create
-            const extendOptions = { ...opts.options, ...this.getGlobalOptions() };
+            const extendOptions = { ...opts.options, ...this.getGlobalOptions(opts.type) };
             this._chart = new chartjs('rvChart', { type: opts.type, data: opts.data, options: extendOptions });
         } else {
             this._panel.body.find('.rv-chart-nodata').css('display', 'block');
@@ -340,7 +340,7 @@ export class ChartLoader {
      * @function getGlobalOptions
      * @return {Object} the global options
      */
-    private getGlobalOptions(): object {
+    private getGlobalOptions(chartType: string): object {
         return {
             maintainAspectRatio: false,
             responsive: true,
@@ -355,7 +355,7 @@ export class ChartLoader {
             },
             layout: {
                 padding: {
-                   right: 12
+                    right: 12
                 }
             },
             legend: {
@@ -363,8 +363,9 @@ export class ChartLoader {
                     fontColor: '#676767',
                     fontSize: 14
                 },
-                onHover: () => { this._panel.body.find('.rv-chart-hidedata-tooltip').css('display', 'block'); },
-                onLeave: () => { this._panel.body.find('.rv-chart-hidedata-tooltip').css('display', 'none'); }
+                onHover: () => { if (chartType !== 'line') this._panel.body.find('.rv-chart-hidedata-tooltip').css('display', 'block'); },
+                onLeave: () => { this._panel.body.find('.rv-chart-hidedata-tooltip').css('display', 'none'); },
+                ...chartType === 'line' ? { onClick: (e) => { return false; } } : {}
             },
             showLines: true,
             elements: {
@@ -493,12 +494,11 @@ export class ChartLoader {
             let splitChar;
             let prefix;
             let suffix;
-            console.log('')
             // data is being filtered based on the config attributes.
             const chartData = attrs.data.filter(i =>
                 config.data.some(function (j) {
                     splitChar = j.split;
-                    prefix = j.prefix; 
+                    prefix = j.prefix;
                     suffix = j.suffix;
                     return j.measure === i.field;
                 })
@@ -521,7 +521,7 @@ export class ChartLoader {
                     };
                     for (let j = 0, len = chartData.length; j < len; j++) {
                         if (typeof chartData[j].value !== 'undefined')
-                                item.data.push(chartData[j].value.split(splitChar)[i]);
+                            item.data.push(chartData[j].value.split(splitChar)[i]);
                     }
                     parsed.datasets.push(item);
                 }
@@ -560,7 +560,7 @@ export class ChartLoader {
         if (!Array.isArray(labels)) {
             labels = Array(index + 1).fill(labels);
         }
-
+        
         return labels;
     }
 }

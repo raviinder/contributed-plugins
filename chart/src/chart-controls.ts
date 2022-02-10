@@ -35,10 +35,15 @@ export class ChartControls {
         // ! DO NOT USE $scope because it makes the build version fails.
         // select option when there is more then 1 chart
         const that = this;
-        this.mapApi.agControllerRegister('ChartSelectCtrl', function() {
+        this.mapApi.agControllerRegister('ChartSelectCtrl', function () {
             // set selected chart and array of charts
             this.selectedChart = '';
             this.charts = {};
+
+            // set label and label array.
+            this.selectedLabel = [];
+            this.selectedSingleLabel = 0;
+            this.labels = {};
 
             // get charts to populate the select option
             ChartParser.getCharts().subscribe(value => {
@@ -47,7 +52,8 @@ export class ChartControls {
                 } else {
                     if (_.isEmpty(this.charts)) {
                         this.selectedChart = "0";
-                        (<any>that).createChart(this.selectedChart);
+                        (<any>that).createChart(this.selectedChart, this.selectedLabel);
+                        ChartParser.populateLabelSelect(this.selectedChart, this);
 
                         // remove loading splash
                         panel.body.find('.rv-chart-loading').css('display', 'none');
@@ -56,8 +62,15 @@ export class ChartControls {
                 }
             });
 
+            // This actually populate the chart and labels combo in panel.
             this.selectChart = () => {
-                (<any>that).createChart(this.selectedChart);
+                (<any>that).createChart(this.selectedChart, this.selectedLabel);
+                ChartParser.populateLabelSelect(this.selectedChart, this);
+            }
+
+            // This actually populate the label in panel.
+            this.LabelChange = () => {
+                (<any>that).createChart(this.selectedChart, this.selectedLabel);
             }
         });
 
@@ -69,16 +82,29 @@ export class ChartControls {
      * Create the chart
      * @function createChart
      * @param {String} selectedChart selected chart
+     * @param {Number} selectedLabel selected label
      */
-    private createChart(selectedChart: string): void {
-        const item = ChartParser._chartAttrs.find((val: any) => val.index === selectedChart);
-
+    private createChart(selectedChart: string, selectedLabel: [number]): void {
+        const item = JSON.parse(JSON.stringify(ChartParser._chartAttrs.find((val: any) => val.index === selectedChart)));
+        if (item.chartType === 'line')
+            item.config.layers[0].data = item.config.layers[0].data.filter(i => selectedLabel.some(j => i.key === j));
         // create the chart from chart type
         if (item.chartType === 'pie') {
             this.loader.createPieChart(item.feature, item.config);
         } else if (item.chartType === 'bar') {
             this.loader.createBarChart(item.feature, item.config);
         } else if (item.chartType === 'line') {
+            // Display Label combo.
+            $('.rv-chart-label-select').css('display', 'block');
+            // Hide and show multi check / single item combo on the basis of items.
+            if (item.config.layers[0].data.length > 1) {
+                $('.multiple-select').css('display', 'block');
+                $('.single-select').css('display', 'none');
+            }
+            else {
+                $('.multiple-select').css('display', 'none');
+                $('.single-select').css('display', 'block');
+            }
             this.loader.createLineChart(item.feature, item.config);
         }
 
