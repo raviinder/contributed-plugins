@@ -66,7 +66,9 @@ export class ChartLine {
         };
 
         // set data options
-        const colors = config.options.colors === '' ? ChartLoader.defaultColors : config.options.colors.split(';');
+        const colors = config.layers[0].data.map((obj, i) => {
+            return obj.color
+        });
         const layerData = config.layers.find(i => i.id === (<any>attrs).layerId);
         this.setData(layerData, attrs, colors, config.axis.xAxis.type);
 
