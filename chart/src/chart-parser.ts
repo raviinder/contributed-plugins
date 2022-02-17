@@ -204,8 +204,8 @@ export class ChartParser {
      * @param {String} selectedChart selected chart from combo.
      * @param {Any} self current object.
      */
-    static populateLabelSelect(selectedChart: string, self: any): void {
-        const item = ChartParser._chartAttrs.find((val: any) => val.index === selectedChart);
+     static populateLabelSelect(selectedChart: string, self: any): void {
+        const item = this.getItem(selectedChart);
         if (item.chartType === 'line') {
             const labelArrayLength = self.selectedLabel.length;
             // setting all default lables at first load or when there is no selection.
@@ -218,9 +218,14 @@ export class ChartParser {
                     }
                     return ({ ...obj, key: key });
                 });
-            let labelData = JSON.parse(JSON.stringify(item.config.layers[0].data));
-            self.labels = labelData.sort((a, b) => (a.measure > b.measure) ? 1 : -1);
+            self.labels = JSON.parse(JSON.stringify(item.config.layers[0].data));
         }
+    }
+
+    static getItem(selectedChart: string): any {
+        const item = ChartParser._chartAttrs.find((val: any) => val.index === selectedChart);
+        item.config.layers[0].data = item.config.layers[0].data.sort((a, b) => (a.measure > b.measure) ? 1 : -1);
+        return item;
     }
 
     static ascii(content: string) {

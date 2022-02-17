@@ -85,7 +85,11 @@ export class ChartControls {
      * @param {Number} selectedLabel selected label
      */
     private createChart(selectedChart: string, selectedLabel: [number]): void {
-        const item = JSON.parse(JSON.stringify(ChartParser._chartAttrs.find((val: any) => val.index === selectedChart)));
+        const item = JSON.parse(JSON.stringify(ChartParser.getItem(selectedChart)));
+        const colors = item.config.options.colors === '' ? ChartLoader.defaultColors : item.config.options.colors.split(';');
+        item.config.layers[0].data = item.config.layers[0].data.map((obj, i) => {
+            return ({ ...obj, color: colors[i] });
+        });
         if (item.chartType === 'line')
             item.config.layers[0].data = item.config.layers[0].data.filter(i => selectedLabel.some(j => i.key === j));
         // create the chart from chart type
