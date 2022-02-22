@@ -212,7 +212,7 @@ export class ChartParser {
             item.config.layers[0].data = item.config.layers[0].data
                 .map((obj, i) => {
                     let key = this.ascii(obj.measure);
-                    if (labelArrayLength === 0) {
+                    if (labelArrayLength === 0 || item.config.layers[0].data.length === 1) {
                         self.selectedLabel.push(key);
                         self.selectedSingleLabel = key;
                     }

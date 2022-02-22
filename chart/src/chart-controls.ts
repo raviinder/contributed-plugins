@@ -75,7 +75,7 @@ export class ChartControls {
         });
 
         // add the control to panel header
-        panel.header._header.find('.rv-header-content')[0].after(this.compileTemplate(CHART_SELECT_TEMPLATE)[0]);
+        panel.header._header.find('.rv-header-content')[0].before(this.compileTemplate(CHART_SELECT_TEMPLATE)[0]);
     }
 
     /**
@@ -85,7 +85,8 @@ export class ChartControls {
      * @param {Number} selectedLabel selected label
      */
     private createChart(selectedChart: string, selectedLabel: [number]): void {
-        const item = JSON.parse(JSON.stringify(ChartParser.getItem(selectedChart)));
+        const origItem = ChartParser.getItem(selectedChart);
+        const item = JSON.parse(JSON.stringify(origItem));
         const colors = item.config.options.colors === '' ? ChartLoader.defaultColors : item.config.options.colors.split(';');
         item.config.layers[0].data = item.config.layers[0].data.map((obj, i) => {
             return ({ ...obj, color: colors[i] });
@@ -101,7 +102,7 @@ export class ChartControls {
             // Display Label combo.
             $('.rv-chart-label-select').css('display', 'block');
             // Hide and show multi check / single item combo on the basis of items.
-            if (item.config.layers[0].data.length > 1) {
+            if (origItem.config.layers[0].data.length > 1) {
                 $('.multiple-select').css('display', 'block');
                 $('.single-select').css('display', 'none');
             }
