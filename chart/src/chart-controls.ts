@@ -4,6 +4,7 @@ import {
 
 import { ChartLoader } from './chart-loader';
 import { ChartParser } from './chart-parser';
+import constants from './common';
 
 const _ = require('lodash');
 
@@ -20,18 +21,18 @@ export class ChartControls {
      * @param {Any} panel the panel
      * @param {ChartLoader} loader the chart loader class
      */
-    constructor(mapApi: any, panel: any, loader: ChartLoader) {
+    constructor(mapApi: any, panel: any, loader: ChartLoader, panelOptions: any) {
         this.mapApi = mapApi;
         this.loader = loader;
 
-        this.initControl(panel);
+        this.initControl(panel, panelOptions);
     }
 
     /**
      * Init the selector control
      * @param {Any} panel the chart panel to add the control to 
      */
-    private initControl(panel: any): void {
+    private initControl(panel: any, panelOptions: any): void {
         // ! DO NOT USE $scope because it makes the build version fails.
         // select option when there is more then 1 chart
         const that = this;
@@ -74,7 +75,19 @@ export class ChartControls {
             }
 
             this.MaximizeChart = () => {
-                $('.panel-contents.chart').css('margin', '0');
+                const rotateCssClass = "rotate"
+                const tooltipAttr = "aria-label";
+                const element = document.querySelector('[id^=btnExpendChartPane]');
+                if (!element.classList.contains(rotateCssClass)) {
+                    const panelOptions = constants._panelOptionsExpand;
+                    panel.element.css(panelOptions);
+                    element.classList.add(rotateCssClass);
+                }
+                else{
+                    const panelOptions = constants._panelOptionsShrink;
+                    panel.element.css(panelOptions);
+                    element.classList.remove(rotateCssClass);
+                }
             }
         });
 
@@ -120,7 +133,7 @@ export class ChartControls {
 
         // set focus on the close button.
 
-        const element = document.querySelector('[id^=chart] .rv-header .md-button');
+        const element = document.querySelector('[id^=chart] .rv-header-controls .md-button');
         (<any>element).rvFocus();
     }
 

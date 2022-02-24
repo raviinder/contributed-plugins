@@ -6,6 +6,7 @@ import { ChartLoader } from './chart-loader';
 import { DetailsManager } from './details-manager';
 import { ChartControls } from './chart-controls';
 import { ChartParser } from './chart-parser';
+import constants from './common';
 
 const _ = require('lodash');
 
@@ -17,12 +18,7 @@ export default class Chart {
     private _panel: any;
     private _panelDetails: DetailsManager;
     private _loader: ChartLoader;
-    private _panelOptions: object = {
-        'margin-top': '60px',
-        'margin-bottom': '60px',
-        'margin-right': '60px',
-        'margin-left': '420px'
-    };
+    public _panelOptions: object = constants._panelOptionsShrink;
 
     /**
     * Plugin init
@@ -51,11 +47,10 @@ export default class Chart {
         this._loader = new ChartLoader(this._mapApi);
 
         // add selector control to panel header
-        new ChartControls(this._mapApi, this._panel, this._loader);
+        new ChartControls(this._mapApi, this._panel, this._loader, this._panelOptions);
 
         // subscribe to panel closing to destroy existing graph and slider
         this._panel.closing.subscribe(() => {
-            $('.panel-contents.chart').css('margin', '60px 60px 60px 420px');
             this._loader.destroy();
         });
 
