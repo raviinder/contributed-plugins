@@ -55,6 +55,7 @@ export default class Chart {
 
         // subscribe to panel closing to destroy existing graph and slider
         this._panel.closing.subscribe(() => {
+            $('.panel-contents.chart').css('margin', '60px 60px 60px 420px');
             this._loader.destroy();
         });
 

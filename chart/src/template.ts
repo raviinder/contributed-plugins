@@ -79,3 +79,10 @@ export const DETAILS_TEMPLATE = `
     <div class="rv-chart-details-value"></div>
     <md-divider></md-divider>
 </div>`;
+
+export const MAXIMIZE_BUTTON = `
+<div ng-controller="ChartSelectCtrl as ctrl">
+<md-button type="button" style="min-width:25px;background-color:transparent;" ng-click="ctrl.MaximizeChart()">
+    <md-icon md-svg-src="action:open_in_new" class="ng-scope" role="img" aria-hidden="true" style="position:absolute; right:0; top:5px;color:#536c77; opacity:.9">
+    </md-icon>
+</md-button></div>`;

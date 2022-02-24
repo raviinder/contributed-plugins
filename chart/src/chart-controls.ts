@@ -1,5 +1,5 @@
 import {
-    CHART_SELECT_TEMPLATE
+    CHART_SELECT_TEMPLATE, MAXIMIZE_BUTTON
 } from './template';
 
 import { ChartLoader } from './chart-loader';
@@ -72,10 +72,15 @@ export class ChartControls {
             this.LabelChange = () => {
                 (<any>that).createChart(this.selectedChart, this.selectedLabel);
             }
+
+            this.MaximizeChart = () => {
+                $('.panel-contents.chart').css('margin', '0');
+            }
         });
 
         // add the control to panel header
         panel.header._header.find('.rv-header-content')[0].before(this.compileTemplate(CHART_SELECT_TEMPLATE)[0]);
+        panel.header._header.find('.rv-header-controls')[0].before(this.compileTemplate(MAXIMIZE_BUTTON)[0]);
     }
 
     /**
