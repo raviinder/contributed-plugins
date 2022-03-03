@@ -12,7 +12,7 @@ export declare class ChartControls {
      * @param {Any} panel the panel
      * @param {ChartLoader} loader the chart loader class
      */
-    constructor(mapApi: any, panel: any, loader: ChartLoader);
+    constructor(mapApi: any, panel: any, loader: ChartLoader, panelOptions: any);
     /**
      * Init the selector control
      * @param {Any} panel the chart panel to add the control to

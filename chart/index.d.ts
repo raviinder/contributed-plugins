@@ -3,7 +3,7 @@ export default class Chart {
     private _panel;
     private _panelDetails;
     private _loader;
-    private _panelOptions;
+    _panelOptions: object;
     /**
     * Plugin init
     * @function init
