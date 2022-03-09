@@ -1,4 +1,4 @@
-/*! Plugin chart: 0.1.2 - "b5942c39e05af9194150dc4bc3c51e8953c879c0" - 2022-03-07T12:39:38.077Z */(()=>{var e={7757:function(e,t,n){
+/*! Plugin chart: 0.1.2 - "8a0438a78c37929d9515e0c363acd643cc65f042" - 2022-03-09T20:26:59.715Z */(()=>{var e={7757:function(e,t,n){
 /*!
  * Chart.js v2.9.4
  * https://www.chartjs.org
