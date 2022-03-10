@@ -170,3 +170,8 @@
     padding: 0 30px;
     width: 200px;
 }
+
+// To rotate the maximize button and to make it minimize
+.rotate {
+    transform: rotate(180deg);
+}
