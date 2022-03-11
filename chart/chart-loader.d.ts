@@ -16,6 +16,7 @@ export declare class ChartLoader {
     private _lineChartOptions;
     private _barChartOptions;
     private _pieChartOptions;
+    private _isDateTime;
     static defaultColors: string[];
     /**
      * Chart loader constructor
