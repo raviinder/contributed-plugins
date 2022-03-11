@@ -401,3 +401,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .rv-chart-select {
   padding: 0 30px;
   width: 200px; }
+
+.rotate {
+  transform: rotate(180deg); }
