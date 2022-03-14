@@ -41,7 +41,9 @@ export declare class ChartLine {
      * @param {String[]} colors the array of colors to use
      * @param {String} xType the x axis type, date or linear
      */
-    setData(layerData: object, attrs: object, colors: string[], xType: string): void;
+    setData(layerData: object, attrs: object, colors: string[], xType: string): {
+        isDateTimeObjForXAxis: boolean;
+    };
     /**
      * Set ranges min and max for the dataset specified axis
      * @function setRanges
@@ -68,4 +70,5 @@ export interface ChartLine {
     title: string;
     language: string;
     ranges: any;
+    isDateTimeObjForXAxis: any;
 }

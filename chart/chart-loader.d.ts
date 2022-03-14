@@ -16,7 +16,6 @@ export declare class ChartLoader {
     private _lineChartOptions;
     private _barChartOptions;
     private _pieChartOptions;
-    private _isDateTime;
     static defaultColors: string[];
     /**
      * Chart loader constructor
@@ -33,8 +32,9 @@ export declare class ChartLoader {
      * @param {String} xType the x axis type, date or linear
      * @param {String} language the viewer language
      * @param {Number} length the length of linear value
+     * @param {isDateTimeObjForXAxis} to differntiate the date and dateTimeObj
      */
-    initSlider(slider: any, min: number, max: number, type: string, language: string, length: number): void;
+    initSlider(slider: any, min: number, max: number, type: string, language: string, length: number, isDateTimeObjForXAxis?: boolean): void;
     /**
      * Set pips (slider labels) format
      * @function formatPips
@@ -44,7 +44,7 @@ export declare class ChartLoader {
      * @param {Number} length the length of linear pips
      * @return {any} value the formated value
      */
-    formatPips(value: any, type: string, lang: string, length: number): any;
+    formatPips(value: any, type: string, lang: string, length: number, isDateTimeObjForXAxis?: boolean): any;
     /**
      * Format tooltips
      * @function setTooltips
