@@ -53,7 +53,7 @@ export declare class ChartLoader {
      * @param {Number} length the length of tooltips
      * @return {Object[]} tooltips as an array of tooltip object
      */
-    setTooltips(type: string, language: string, length: number): object[];
+    setTooltips(type: string, language: string, length: number, isDateTimeObjForXAxis?: boolean): object[];
     /**
      * Parse the graph pips labels value and set slider range
      * @function parsePips
