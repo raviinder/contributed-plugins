@@ -45,6 +45,7 @@ export declare class ChartLoader {
      * @return {any} value the formated value
      */
     formatPips(value: any, type: string, lang: string, length: number, isDateTimeObjForXAxis?: boolean): any;
+    prependZero(n: number): string;
     /**
      * Format tooltips
      * @function setTooltips
