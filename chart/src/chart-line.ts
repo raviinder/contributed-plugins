@@ -70,7 +70,13 @@ export class ChartLine {
             return obj.color
         });
         const layerData = config.layers.find(i => i.id === (<any>attrs).layerId);
-        this.setData(layerData, attrs, colors, config.axis.xAxis.type);
+        // This variable "isDateTimeObjForXAxis" is used to differentiate the date and datetime object.
+        // So if we are getting a data from service which is only delivering the date object without time
+        // then this variable will get a false value. On contrary, if the data from service is getting 
+        // datetime object then it will provide the true value. and this value is being used to set the step
+        // in the slider. if date time then 15 mins and if a date only then 24 hours is the step.
+        // Same object is being used to conditionally display the date time or date in the tool tip on chart. 
+        this.isDateTimeObjForXAxis = this.setData(layerData, attrs, colors, config.axis.xAxis.type);
 
         // set labels options
         this.options.scales.xAxes.push(this.setAxis('xAxes', config.axis.xAxis, attrs));
@@ -85,7 +91,7 @@ export class ChartLine {
      * @param {String[]} colors the array of colors to use
      * @param {String} xType the x axis type, date or linear
      */
-    setData(layerData: object, attrs: object, colors: string[], xType: string) {
+    setData(layerData: object, attrs: object, colors: string[], xType: string): { isDateTimeObjForXAxis: boolean } {
         // get data for the graph and keep a copy for line chart with time
         // we have a slider to refine the graph by years
         this.data = ChartLoader.parse(layerData, attrs, colors, xType);
@@ -109,6 +115,7 @@ export class ChartLine {
             this.setRanges(dataset, 'x');
             this.setRanges(dataset, 'y');
         }
+        return this.data.isDateTimeObjForXAxis;
     }
 
     /**
@@ -201,4 +208,5 @@ export interface ChartLine {
     title: string;
     language: string;
     ranges: any;
+    isDateTimeObjForXAxis: any;
 }

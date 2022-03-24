@@ -6,6 +6,7 @@ import { CANVAS_TEMPLATE } from './template';
 
 import * as chartjs from 'chart.js';
 import * as nouislider from 'nouislider';
+import { tr } from 'date-fns/locale';
 
 /**
  * Creates and manages charts.
@@ -71,8 +72,9 @@ export class ChartLoader {
      * @param {String} xType the x axis type, date or linear
      * @param {String} language the viewer language
      * @param {Number} length the length of linear value
+     * @param {isDateTimeObjForXAxis} to differntiate the date and dateTimeObj
      */
-    initSlider(slider: any, min: number, max: number, type: string, language: string, length: number) {
+    initSlider(slider: any, min: number, max: number, type: string, language: string, length: number, isDateTimeObjForXAxis: boolean = false) {
         const delta = Math.abs(max - min);
 
         // create the step
@@ -86,17 +88,17 @@ export class ChartLoader {
                     behaviour: 'drag-tap',
                     connect: true,
                     snap: false,
-                    tooltips: this.setTooltips(type, language, length),
+                    tooltips: this.setTooltips(type, language, length, isDateTimeObjForXAxis),
                     range: { min: min, max: max },
                     orientation: (slider.id.slice(-1) === 'X') ? 'horizontal' : 'vertical',
                     direction: (slider.id.slice(-1) === 'X') ? 'ltr' : 'rtl',
-                    step: (slider.id.slice(-1) === 'X') ? 604800000 : step, // if x axis, step by week
+                    step: (slider.id.slice(-1) === 'X') ? !isDateTimeObjForXAxis ? 86400000 : 900000 : step, // if x axis, step by 86400000 (24 hours) // 900000 (15 mins)
                     pips: {
                         mode: 'positions',
                         values: [0, 25, 50, 75, 100],
                         density: 3,
                         format: {
-                            to: (value: number) => { return this.formatPips(value, type, language, length); },
+                            to: (value: number) => { return this.formatPips(value, type, language, length, isDateTimeObjForXAxis); },
                             from: Number
                         }
                     }
@@ -143,20 +145,25 @@ export class ChartLoader {
      * @param {Number} length the length of linear pips
      * @return {any} value the formated value
      */
-    formatPips(value: any, type: string, lang: string, length: number): any {
+    formatPips(value: any, type: string, lang: string, length: number, isDateTimeObjForXAxis: boolean = false): any {
         if (type === 'linear') {
             value = value.toFixed(length);
         } else if (type === 'date') {
             let date = new Date(value);
 
-            if (lang === 'en-FR') {
-                value = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-            } else {
-                value = `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+            if (!isDateTimeObjForXAxis) {
+                value = `${date.getFullYear()}-${this.prependZero(date.getMonth() + 1)}-${this.prependZero(date.getDate())}`;
+            }
+            else {
+                value = `${date.getFullYear()}-${this.prependZero(date.getMonth() + 1)}-${this.prependZero(date.getDate())} ${this.prependZero(date.getHours())}:${this.prependZero(date.getMinutes())}`;
             }
         }
 
         return value;
+    }
+
+    prependZero(n: number): string{
+        return ("0" + n).slice(-2)
     }
 
     /**
@@ -167,10 +174,9 @@ export class ChartLoader {
      * @param {Number} length the length of tooltips
      * @return {Object[]} tooltips as an array of tooltip object
      */
-    setTooltips(type: string, language: string, length: number): object[] {
-        const tooltips = [{ to: (value: number) => this.formatPips(value, type, language, length), from: Number }]
-        tooltips.push({ to: (value: number) => this.formatPips(value, type, language, length), from: Number })
-
+    setTooltips(type: string, language: string, length: number, isDateTimeObjForXAxis: boolean = false): object[] {
+        const tooltips = [{ to: (value: number) => this.formatPips(value, type, language, length, isDateTimeObjForXAxis), from: Number }]
+        tooltips.push({ to: (value: number) => this.formatPips(value, type, language, length, isDateTimeObjForXAxis), from: Number })
         return tooltips;
     }
 
@@ -296,7 +302,7 @@ export class ChartLoader {
                     rangeX.min = rangeX.min.getTime();
                     rangeX.max = rangeX.max.getTime()
                 }
-                this.initSlider(this._sliderX, rangeX.min, rangeX.max, config.axis.xAxis.type, config.language, 0);
+                this.initSlider(this._sliderX, rangeX.min, rangeX.max, config.axis.xAxis.type, config.language, 0, this._lineChartOptions.isDateTimeObjForXAxis);
 
                 // get number of decimal for step and pips
                 const countDecimals = (values: any) => {
@@ -328,7 +334,10 @@ export class ChartLoader {
     draw(opts: any): void {
         if (opts.data.datasets.length !== 0) {
             // extend chart options with global ones then create
-            const extendOptions = { ...opts.options, ...this.getGlobalOptions(opts.type) };
+            const extendOptions = {
+                ...opts.options,
+                ...this.getGlobalOptions(opts.type, typeof (opts.isDateTimeObjForXAxis) !== 'undefined' ? opts.isDateTimeObjForXAxis : false)
+            };
             this._chart = new chartjs('rvChart', { type: opts.type, data: opts.data, options: extendOptions });
         } else {
             this._panel.body.find('.rv-chart-nodata').css('display', 'block');
@@ -340,7 +349,7 @@ export class ChartLoader {
      * @function getGlobalOptions
      * @return {Object} the global options
      */
-    private getGlobalOptions(chartType: string): object {
+    private getGlobalOptions(chartType: string, isDateTimeObjForXAxis: boolean): object {
         return {
             maintainAspectRatio: false,
             responsive: true,
@@ -396,7 +405,10 @@ export class ChartLoader {
                 axis: 'x', // this need to be set to select all values to a specified x
                 callbacks: {
                     title: (tooltipItem: any): string => {
-                        return tooltipItem[0].label.split(',').filter((item: any, index: any) => index < 2).join(', ');
+                        if (!isDateTimeObjForXAxis)
+                            return tooltipItem[0].label.split(',').filter((item: any, index: any) => index < 2).join(', ');
+                        else
+                            return tooltipItem[0].label;
                     },
                     label: (tooltipItem: any, data: any): string => {
                         const item = data.datasets[tooltipItem.datasetIndex];
@@ -426,7 +438,7 @@ export class ChartLoader {
      * @return {Object} the parse datasets
      */
     static parse(config: any, attrs: any, colors: string[] = [], xType?: string): { datasets: any[] } {
-        const parsed = { datasets: [] };
+        const parsed = { datasets: [], isDateTimeObjForXAxis: false };
 
         // TODO: work around for CFS do not keep as is for production
         const parseDate = function (dateString: string): Date {
@@ -438,7 +450,7 @@ export class ChartLoader {
             else if (dateString.length === 7 && dateString.indexOf('-') === -1) { dateString = `${dateString}-01`; }
             else if (dateString.length === 8 && dateString.indexOf('-') === -1) { dateString = `${dateString.substring(0, 4)}-${dateString.substring(4, 6)}-${dateString.substring(6, 8)}`; }
 
-            return new Date(`${dateString.trim()}T00:00:00`);
+            return new Date(parsed.isDateTimeObjForXAxis ? dateString : dateString.replace('Z', ''));
         }
         // A new attribute "datatype" is introduced to differentiate single or multifield data. 
         // By default it will be treated as singlefield  
@@ -476,6 +488,13 @@ export class ChartLoader {
                             }
                         } else if (data.type === 'combine') {
                             let parseCombValues = parse.replace(new RegExp(data.regex, 'g'), '*').split('*').filter(Boolean);
+                            let numberPattern = /\d+/g;
+                            parsed.isDateTimeObjForXAxis = (parseCombValues.filter(q=>{
+                                let time: any = parseInt(q.split('T')[1].split(data.split)[0].match(numberPattern).join(''));
+                                if (time > 0) {
+                                    return true;
+                                }
+                            })).length > 0;
                             for (let val of parseCombValues) {
                                 let splitVal = val.split(data.split);
 
@@ -560,7 +579,7 @@ export class ChartLoader {
         if (!Array.isArray(labels)) {
             labels = Array(index + 1).fill(labels);
         }
-        
+
         return labels;
     }
 }
