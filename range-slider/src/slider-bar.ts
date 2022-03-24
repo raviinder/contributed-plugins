@@ -23,6 +23,7 @@ export class SliderBar {
     private _limit: Range = { min: null, max: null };
     private _limits: number[] = [];
     private _step: number;
+    private _oriStep: number;
     private _precision: number;
     private _stepType: string;
     private _rangeType: string;
@@ -266,19 +267,24 @@ export class SliderBar {
      * @param {String} language the viewerlanguage (en-CA or fr-CA)
      */
     startSlider(type: string, language: string): void {
+        function timestamp(str) {
+            return new Date(str).getTime();
+        }
+
         // initialize the slider
         const mapWidth = this._mapApi.fgpMapObj.width;
         nouislider.create(this._slider,
             {
-                start: (this._rangeType === 'dual') ? [this.range.min, this.range.max] : [this.range.min],
+                start: (this._rangeType === 'dual') ? [this.limit.min, this.limit.max] : [this.range.min],
                 connect: true,
                 behaviour: 'drag-tap',
                 tooltips: this.setTooltips(type, language),
                 range: this.setNoUiBarRanges(mapWidth, this.limit, this._stepType),
-                step: (this._limit.max - this.limit.min) / 100,
+                step: 7 * 24 * 60 * 60 * 1000, // 1 week
                 snap: (this._stepType === 'static') ? true : false,
                 pips: {
-                    mode: 'range',
+                    mode: this._stepType === 'dynamic' ? 'positions' : 'range',
+                    values: this._stepType === 'dynamic' ? [0, 25, 50, 75, 100] : null,
                     density: (this._stepType === 'static') ? 100 : (mapWidth > 800) ? 5 : 10,
                     format: {
                         to: (value: number) => { return this.formatPips(value, type, language); },
@@ -286,6 +292,12 @@ export class SliderBar {
                     }
                 }
             });
+
+        // overwrite range to set it as limit by default
+        // TODO: Do this for the moment but revice when migrating to standard time dimension
+        this._oriStep = this._slider.range.max - this._slider.range.min;
+        this._slider.range.min = this.limit.min;
+        this._slider.range.max = this.limit.max;
 
         // remove overlapping pips. This can happen often with static limits and date
         this.removePipsOverlaps();
@@ -299,7 +311,7 @@ export class SliderBar {
         if (this._slider.range.min === null) { this._slider.range = this.range; }
 
         // set the initial definition query
-        this._slider.range = (this._rangeType === 'dual') ? this._slider.range : { min: this._slider.range.min, max: this._slider.range.min }
+        this._slider.range = (this._rangeType === 'dual') ? this._slider.range : { min: this._slider.range.min, max: this._slider.range.max }
         this.setDefinitionQuery(this._slider.range);
 
         // set step
@@ -371,12 +383,6 @@ export class SliderBar {
         if (stepType === 'dynamic') {
             range.min = limit.min;
             range.max = limit.max;
-            range['50%'] = limit.min + delta / 2;
-
-            if (width > 800) {
-                range['25%'] = limit.min + delta / 4;
-                range['75%'] = limit.min + (delta / 4) * 3;
-            }
         }  else if (stepType === 'static') {
             range.min = limit.min;
             range.max = limit.max;
@@ -417,12 +423,7 @@ export class SliderBar {
             value = (Math.round(value * 100) / 100).toFixed(this._precision);
         } else if (field === 'date' || field === 'wmst') {
             let date = new Date(value);
-
-            if (lang === 'en-FR') {
-                value = dayjs.utc(date).format('DD/MM/YYYY HH:mm:ss');
-            } else {
-                value = dayjs.utc(date).format('MM/DD/YYYY HH:mm:ss');
-            }
+            value = dayjs.utc(date).format('YYYY-MM-DD HH:mm');
 
             // if hours, add it to the label and change margin so label are inside
             if (this._precision === -2) {
@@ -457,6 +458,12 @@ export class SliderBar {
      * @param {Boolean} play true if slider is playing, false otherwise
      */
     play(play: boolean): void {
+        if (play && (this._slider.range.min === this.limit.min && this._slider.range.max === this.limit.max)) {
+            this.range.max = this.range.min + this._oriStep;
+            this._slider.noUiSlider.set([this.range.min, this.range.max]);
+            this.setDefinitionQuery(this.range);
+        }
+
         if (play) {
             // set play state to observable to change the icon
             SliderBar.setPlayState(play);
@@ -654,8 +661,8 @@ export class SliderBar {
      * @function refresh
      */
     refresh(): void {
-        this._slider.noUiSlider.set([this.range.min, this.range.max]);
-        this.setDefinitionQuery(this.range);
+        this._slider.noUiSlider.set([this.limit.min, this.limit.max]);
+        this.setDefinitionQuery(this.limit);
         this.pause();
     }
 
@@ -812,13 +819,8 @@ export class SliderBar {
                             `${layer.field} >= DATE \'${dates[0]}\' AND ${layer.field} <= DATE \'${dates[1]}\'`);
                     }
                 } else if (layerType === 'esriImage') {
-                    // image server works differently. Instead of setting the query, we set the time extent for the map
-                    // because image server will work with single range type, we add 1 day to end date to create an array
                     const dates = this.getDate(range);
-                    const timeExtent = new this._myBundle.timeExtent();
-                    timeExtent.startTime = new Date(dates[0]);
-                    timeExtent.endTime = new Date(dates[1]);
-                    this._mapApi.esriMap.setTimeExtent(timeExtent);
+                    mapLayer.esriLayer.setDefinitionExpression(`${layer.field} >= DATE \'${dates[0]}\' AND ${layer.field} <= DATE \'${dates[1]}\'`, false);
                 } else if (layerType === 'ogcWms') {
                     // the way it works with string (we can use wildcard like %)
                     // mapLayer.esriLayer.setCustomParameters({}, {layerDefs: "{'0': \"CLAIM_STAT LIKE 'SUSPENDED'\"}"});
@@ -866,7 +868,7 @@ export class SliderBar {
                     const filterName = this._config.type === 'number' ? 'rangeSliderNumberFilter' : 'rangeSliderDateFilter';
                     mapLayer.setFilterSql(filterName, ``);
                 } else if (layerType === 'esriImage') {
-                    this._mapApi.esriMap.setTimeExtent(null);
+                    mapLayer.esriLayer.setDefinitionExpression(null, false);
                 } else if (layerType === 'ogcWms') {
                     mapLayer.esriLayer.setCustomParameters({}, { '':'' });
                 }

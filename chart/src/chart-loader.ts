@@ -146,6 +146,7 @@ export class ChartLoader {
      * @return {any} value the formated value
      */
     formatPips(value: any, type: string, lang: string, length: number, isDateTimeObjForXAxis: boolean = false, isCallForTooltip: boolean): any {
+
         if (type === 'linear') {
             value = value.toFixed(length);
         } else if (type === 'date') {
@@ -175,8 +176,9 @@ export class ChartLoader {
      * @return {Object[]} tooltips as an array of tooltip object
      */
     setTooltips(type: string, language: string, length: number, isDateTimeObjForXAxis: boolean = false): object[] {
-        const tooltips = [{ to: (value: number) => this.formatPips(value, type, language, length, isDateTimeObjForXAxis, true), from: Number }]
-        tooltips.push({ to: (value: number) => this.formatPips(value, type, language, length, isDateTimeObjForXAxis, true), from: Number })
+    const tooltips = [{ to: (value: number) => this.formatPips(value, type, language, length, isDateTimeObjForXAxis, true), from: Number }]
+    tooltips.push({ to: (value: number) => this.formatPips(value, type, language, length, isDateTimeObjForXAxis, true), from: Number })
+
         return tooltips;
     }
 
